@@ -1,0 +1,77 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Clash Display', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-inter: 'Inter', system-ui, sans-serif;
+  
+  --color-obsidian: #050505;
+  --color-electric: #007BFF;
+  --color-muted: #666666;
+  --color-pure: #FFFFFF;
+}
+
+html, body {
+  position: relative;
+}
+
+body {
+  background-color: var(--color-obsidian);
+  color: var(--color-pure);
+  font-family: var(--font-inter); /* Text default is Inter */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  position: relative;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-sans); /* Headings default to Clash Display */
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-electric);
+}
+
+::selection {
+  background-color: var(--color-electric);
+  color: #fff;
+}
+
+/* Base Utility for Grid */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Glitch Animation */
+@keyframes glitch-anim {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
+}
+.glitch-hover:hover {
+  animation: glitch-anim 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
