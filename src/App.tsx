@@ -19,7 +19,111 @@ export const scrollToElement = (id: string) => {
 
 /** --- UTILITY COMPONENTS --- */
 
-const StaggeredText = ({ text, className, as: Component = "h1" }: { text: string; className?: string, as?: any }) => {
+const Preloader = ({ onComplete }: { onComplete: () => void }) => {
+  const [progress, setProgress] = useState({ p: 0, hex: "0x0000" });
+  const [phase, setPhase] = useState("BOOT_SEQ");
+
+  useEffect(() => {
+    const duration = 2800;
+    const startTime = Date.now();
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$^&*";
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const percent = Math.min(100, (elapsed / duration) * 100);
+      
+      let glitch = "";
+      for(let i=0; i<5; i++) glitch += chars[Math.floor(Math.random() * chars.length)];
+      
+      setProgress({ p: Math.floor(percent), hex: `0x${glitch}` });
+
+      if (percent < 30) setPhase("BOOT_SEQ");
+      else if (percent < 75) setPhase("NEURAL_SYNC");
+      else if (percent < 100) setPhase("DECRYPT_UI");
+
+      if (percent >= 100) {
+        clearInterval(interval);
+        setProgress({ p: 100, hex: "F & S" });
+        setPhase("ACCESS_GRANTED");
+        setTimeout(() => {
+          onComplete();
+        }, 800); // Hold briefly at 100% for full impact before diving in
+      }
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      exit={{ scale: 8, opacity: 0, filter: "blur(20px)", transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] } }}
+      className="fixed inset-0 z-[999999] bg-[#050505] flex items-center justify-center overflow-hidden touch-none"
+    >
+      {/* Immersive background grid */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-10" style={{ transform: "perspective(500px) rotateX(60deg) translateY(-50px) scale(3)" }} />
+
+      {/* Radar Scanline */}
+      <motion.div
+        animate={{ top: ["-10%", "110%"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+        className="absolute w-full h-[2px] bg-[#007BFF] drop-shadow-[0_0_15px_rgba(0,123,255,1)] opacity-30 z-0"
+      />
+
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Advanced Geometric UI Core */}
+        <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center mb-12 transform-gpu" style={{ perspective: 1000 }}>
+          
+          {/* Outer Rotating Solid Ring */}
+          <motion.div 
+            animate={{ rotate: 360 }} 
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }} 
+            className="absolute inset-0 rounded-full border-[1px] border-white/5 border-t-[#007BFF] border-b-[#007BFF] drop-shadow-[0_0_10px_rgba(0,123,255,0.4)]" 
+          />
+          
+          {/* Middle Counter-Rotating Dashed Matrix Ring */}
+          <motion.div 
+            animate={{ rotate: -360 }} 
+            transition={{ duration: 7, repeat: Infinity, ease: "linear" }} 
+            className="absolute inset-6 rounded-full border-[1px] border-dashed border-[#007BFF]/40 drop-shadow-[0_0_5px_rgba(0,123,255,0.2)]" 
+          />
+          
+          {/* Inner 3D Spinning Code Cube structure */}
+          <motion.div 
+            animate={{ rotateX: 360, rotateY: 360, rotateZ: 360 }} 
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }} 
+            className="absolute w-16 h-16 border-[1px] border-white/20 transform-style-preserve-3d" 
+          />
+
+          {/* Central Decrypted Brand Signal */}
+          <div className="absolute font-heading font-black text-2xl md:text-3xl tracking-widest text-[#007BFF] drop-shadow-[0_0_12px_rgba(0,123,255,0.8)] whitespace-nowrap">
+            {progress.hex}
+          </div>
+        </div>
+
+        {/* Neural progress metrics */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="font-mono text-[10px] md:text-xs text-[#007BFF] uppercase tracking-[0.4em] glow-text">
+            {phase} //
+          </div>
+          
+          <div className="font-mono text-5xl md:text-7xl text-white font-light tracking-tighter flex items-baseline">
+            {progress.p.toString().padStart(3, '0')}<span className="text-[#333] text-2xl md:text-4xl pr-1">%</span>
+          </div>
+          
+          {/* Minimal high-tech progress loading bar */}
+          <div className="w-56 md:w-72 h-[1px] bg-white/10 mt-6 relative overflow-hidden">
+             <motion.div 
+               className="absolute top-0 left-0 h-full bg-[#007BFF] drop-shadow-[0_0_10px_rgba(0,123,255,1)]"
+               style={{ width: `${progress.p}%` }}
+             />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const StaggeredText = ({ text, className, as: Component = "h1", delayOffset = 0 }: { text: string; className?: string, as?: any, delayOffset?: number }) => {
   const words = text.split(" ");
   return (
     <Component className={className}>
@@ -29,7 +133,7 @@ const StaggeredText = ({ text, className, as: Component = "h1" }: { text: string
             initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: delayOffset + i * 0.1, ease: "easeOut" }}
             className="inline-block"
           >
             {word}
@@ -135,12 +239,13 @@ const HeroSection = () => {
             as="h1"
             text="Пространство будущего"
             className="text-4xl md:text-6xl lg:text-8xl font-bold font-heading text-white tracking-tight uppercase leading-[0.9] mb-8 break-words"
+            delayOffset={2.8}
           />
           
           <motion.p 
             initial={{ opacity: 0, filter: "blur(10px)", x: -20 }}
             animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 1, delay: 3.4 }}
             className="text-[#666666] font-inter text-lg md:text-2xl lg:text-3xl max-w-2xl leading-relaxed mb-12 border-l-2 border-[#007BFF] pl-4 md:pl-6"
           >
             Дизайн-инженерия нового поколения: где каждый пиксель обоснован алгоритмом.
@@ -149,7 +254,7 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.2 }}
+            transition={{ duration: 1, delay: 3.8 }}
           >
             <MagneticButton onClick={scrollToContacts}>
               <motion.div 
@@ -584,6 +689,7 @@ const ContactsSection = () => {
 };
 
 export default function App() {
+  const [isBooting, setIsBooting] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
@@ -636,6 +742,8 @@ export default function App() {
 
   // Track active section via IntersectionObserver with a center screen scan-line
   useEffect(() => {
+    if (isBooting) return; // Wait for boot
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -656,19 +764,25 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Lock body scroll when menu is open
+  // Lock body scroll when menu is open or booting
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isBooting || isMenuOpen) {
       document.body.style.overflow = 'hidden';
+      (window as any).lenisInstance?.stop();
     } else {
       document.body.style.overflow = '';
+      (window as any).lenisInstance?.start();
     }
-  }, [isMenuOpen]);
+  }, [isBooting, isMenuOpen]);
 
   return (
     // Solved X-axis scroll jumps without breaking top/sticky logic
     <div className="bg-[#050505] min-h-screen text-white selection:bg-[#007BFF] selection:text-white scroll-smooth w-full relative overflow-clip">
       
+      <AnimatePresence mode="wait">
+        {isBooting && <Preloader onComplete={() => setIsBooting(false)} />}
+      </AnimatePresence>
+
       {/* Desktop Global Navigation (Floating Pill) */}
       <div className="hidden md:block fixed top-8 left-1/2 -translate-x-1/2 z-[11000]">
         <div className="bg-[#111]/60 backdrop-blur-xl border border-white/10 rounded-full p-2 shadow-[0_4px_30px_rgba(0,0,0,0.5)] flex items-center gap-1">
