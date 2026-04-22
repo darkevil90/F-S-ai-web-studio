@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
 import { NeuralCore } from './components/NeuralCore';
-import { sound } from './lib/audio';
 
 export const scrollToElement = (id: string) => {
   const element = document.getElementById(id);
@@ -71,8 +70,6 @@ const MagneticButton = ({ children, onClick }: { children: React.ReactNode, onCl
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      onMouseEnter={() => sound.playHover()}
-      onMouseDown={() => sound.playClick()}
       style={{ x: smoothX, y: smoothY }}
       onClick={onClick}
       className="cursor-pointer inline-block"
@@ -589,7 +586,6 @@ const ContactsSection = () => {
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
-  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
 
   const menuItems = [
     { name: "01 // Главная", shortName: "Главная", id: "hero" },
@@ -601,22 +597,14 @@ export default function App() {
   ];
 
   const handleScrollTo = (id: string) => {
-    sound.playClick();
     setIsMenuOpen(false);
     setTimeout(() => {
       scrollToElement(id);
-    }, 600);
+    }, 600); // Increased timeout to wait for the extremely smooth exit animation
   };
 
   const handleDesktopScrollTo = (id: string) => {
-    sound.playClick();
     scrollToElement(id);
-  };
-
-  const toggleSound = async () => {
-    const state = await sound.toggle();
-    setIsAudioEnabled(state);
-    if (!state) sound.playClick();
   };
 
   // Initialize Lenis Smooth Scrolling
@@ -715,10 +703,7 @@ export default function App() {
       {/* Mobile Global Navigation (Burger Button completely borderless) */}
       <div className="fixed top-6 right-6 md:hidden z-[11000]">
         <button 
-          onClick={() => {
-            sound.playMenuToggle(!isMenuOpen);
-            setIsMenuOpen(!isMenuOpen);
-          }}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="relative w-12 h-12 flex flex-col items-center justify-center gap-2 group outline-none"
         >          
           <motion.div 
@@ -761,7 +746,6 @@ export default function App() {
                 <motion.button
                   key={item.id}
                   onClick={() => handleScrollTo(item.id)}
-                  onMouseEnter={() => sound.playHover()}
                   initial={{ opacity: 0, y: 30, filter: "blur(15px)", scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
                   exit={{ 
@@ -811,31 +795,6 @@ export default function App() {
       <div className="fixed inset-0 z-0 pointer-events-none">
         <NeuralCore />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#050505_80%)]" />
-      </div>
-
-      {/* Global Sound Toggle Button */}
-      <div className="fixed bottom-6 left-6 md:bottom-8 md:left-8 z-[11000]">
-        <button 
-          onClick={toggleSound}
-          onMouseEnter={() => isAudioEnabled && sound.playHover()}
-          className="font-mono text-xs md:text-sm text-[#666] hover:text-white uppercase tracking-widest transition-colors flex items-center gap-2 group"
-        >
-          <div className="flex gap-1 items-end h-3">
-            {[1, 2, 3].map((bar) => (
-              <motion.div 
-                key={bar}
-                animate={{ 
-                  height: isAudioEnabled ? ['3px', '12px', '3px'] : '3px',
-                  backgroundColor: isAudioEnabled ? '#007BFF' : '#666'
-                }}
-                transition={{ duration: 1, repeat: Infinity, delay: bar * 0.2, ease: "easeInOut" }}
-                className="w-1 bg-[#666] group-hover:bg-white transition-colors"
-                style={{ height: '3px' }}
-              />
-            ))}
-          </div>
-          <span className="hidden md:inline ml-2">[ {isAudioEnabled ? 'AUDIO: ON' : 'AUDIO: OFF'} ]</span>
-        </button>
       </div>
 
       <HeroSection />
