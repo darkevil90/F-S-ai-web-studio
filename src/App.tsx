@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
+import { Monitor, Cpu, Server, ChevronRight } from 'lucide-react';
 import { NeuralCore } from './components/NeuralCore';
 
 export const scrollToElement = (id: string) => {
@@ -270,17 +271,20 @@ const TechStackSection = () => {
   const cards = [
     { 
       category: "Frontend", 
+      icon: <Monitor className="w-8 h-8 text-[#007BFF]" />,
       items: ["Next.js", "Three.js", "GSAP", "React", "Framer Motion"],
       details: "Формируем визуальную часть с использованием передовых frontend-фреймворков и библиотек для 3D графики и плавной анимации. Каждый элемент оптимизирован для достижения 60 FPS на всех устройствах."
     },
     { 
       category: "AI & Design", 
+      icon: <Cpu className="w-8 h-8 text-[#007BFF]" />,
       items: ["Google AI Studio", "Stitch", "Antigravity", "Figma", "Midjourney"],
       details: "Интегрируем генеративный ИИ в пайплайн проектирования. Автоматизируем рутину, генерируем визуальные концепты и программируем когнитивные узлы для интеллектуальных интерфейсов."
     },
     { 
       category: "Backend & Ops", 
-      items: ["Node.js", "Vercel", "Firebase"],
+      icon: <Server className="w-8 h-8 text-[#007BFF]" />,
+      items: ["Node.js", "Vercel", "Firebase", "PostgreSQL", "Docker"],
       details: "Строим надежные серверные решения и масштабируемые бессерверные архитектуры. Обеспечиваем высокую производительность, безопасность и безупречный деплой для каждого продукта."
     }
   ];
@@ -300,25 +304,37 @@ const TechStackSection = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
             {cards.map((card, idx) => (
-              <div key={idx} onClick={() => setSelectedTech(idx)} className="cursor-pointer">
+              <div key={idx} onClick={() => setSelectedTech(idx)} className="cursor-pointer group">
                 <TiltCard className="h-full">
-                  <div className="flex flex-col justify-between p-6 md:p-10 h-full min-h-[250px] md:min-h-[350px] rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover:border-[#007BFF]/50 transition-all duration-300">
+                  <div className="flex flex-col p-8 md:p-10 h-full min-h-[350px] md:min-h-[450px] rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover:border-[#007BFF]/50 transition-all duration-500 relative overflow-hidden">
                     
-                    <div className="absolute inset-0 bg-[#007BFF]/0 group-hover:bg-[#007BFF]/10 blur-xl transition-all duration-500 rounded-3xl pointer-events-none" />
+                    <div className="absolute inset-0 bg-[#007BFF]/0 group-hover:bg-[#007BFF]/5 blur-2xl transition-all duration-700 rounded-3xl pointer-events-none" />
+                    
+                    <div className="flex justify-between items-start mb-8 relative z-10">
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-2xl group-hover:bg-[#007BFF]/10 group-hover:border-[#007BFF]/30 transition-all duration-500">
+                        {card.icon}
+                      </div>
+                      <span className="font-mono text-xs uppercase tracking-widest text-[#444] group-hover:text-[#666]">0{idx + 1}</span>
+                    </div>
 
-                    <h4 className="font-heading text-xl md:text-2xl text-[#666666] group-hover:text-white transition-colors duration-300 uppercase tracking-widest relative z-10">
+                    <h4 className="font-heading text-2xl md:text-3xl text-white uppercase tracking-tight relative z-10 mb-8">
                       {card.category}
                     </h4>
                     
-                    <div className="flex flex-col gap-3 mt-8 relative z-10">
-                      {card.items.slice(0, 3).map((item, i) => (
-                        <span key={i} className="font-mono text-lg md:text-xl lg:text-3xl text-white font-medium group-hover:text-[#007BFF] transition-colors duration-300">
-                          {item}
-                        </span>
+                    <div className="flex flex-col gap-4 relative z-10 flex-grow">
+                      {card.items.slice(0, 4).map((item, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-1.5 h-1.5 bg-[#007BFF] rounded-full opacity-40 group-hover:opacity-100 transition-opacity" />
+                          <span className="font-mono text-base md:text-lg text-[#888] group-hover:text-white transition-colors duration-300">
+                            {item}
+                          </span>
+                        </div>
                       ))}
-                      {card.items.length > 3 && (
-                        <span className="font-mono text-sm text-[#666666] mt-2 group-hover:text-white transition-colors">+ Подробнее</span>
-                      )}
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
+                      <span className="font-mono text-xs uppercase tracking-widest text-[#666] group-hover:text-[#007BFF] transition-colors">Подробнее</span>
+                      <ChevronRight className="w-4 h-4 text-[#444] group-hover:text-[#007BFF] group-hover:translate-x-1 transition-all" />
                     </div>
                   </div>
                 </TiltCard>
@@ -393,6 +409,7 @@ const TechStackSection = () => {
 
 const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, progress: any }) => {
   const center = index / 3;
+  const cardRef = useRef<HTMLDivElement>(null);
   
   // Use mapping functions to avoid Web Animations API WAAPI out-of-bounds offset errors
   const scale = useTransform(progress, (v: number) => {
@@ -403,7 +420,7 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
     return 1 - ((v - center) / (max - center)) * 0.25;
   });
 
-  const rotateY = useTransform(progress, (v: number) => {
+  const scrollRotateY = useTransform(progress, (v: number) => {
     const min = center - 0.35;
     const max = center + 0.35;
     if (v <= min) return 25;
@@ -420,35 +437,132 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
     return 1 - ((v - center) / (max - center)) * 0.9;
   });
 
+  // Mouse Interaction Values
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  
+  const smoothMouseX = useSpring(mouseX, { damping: 30, stiffness: 200 });
+  const smoothMouseY = useSpring(mouseY, { damping: 30, stiffness: 200 });
+
+  // Spotlight transform
+  const spotlightTop = useTransform(smoothMouseY, [0, 1], ["0%", "100%"]);
+  const spotlightLeft = useTransform(smoothMouseX, [0, 1], ["0%", "100%"]);
+
+  // Tilt transform (subtle)
+  const tiltX = useTransform(smoothMouseY, [0, 1], [8, -8]);
+  const tiltY = useTransform(smoothMouseX, [0, 1], [-8, 8]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  };
+
   return (
     <div className="w-screen h-[100dvh] flex items-center justify-center p-4 md:p-6 shrink-0 relative" style={{ perspective: 1200 }}>
       <motion.div
-        style={{ scale, rotateY, opacity, transformStyle: "preserve-3d" }}
-        className={`relative w-full max-w-6xl h-[70vh] md:h-[65vh] rounded-3xl border ${proj.isFuture ? 'border-[#007BFF]/50' : 'border-white/10'} flex flex-col justify-between overflow-hidden group ${proj.bgClass}`}
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ 
+          scale, 
+          rotateY: scrollRotateY, 
+          opacity, 
+          transformStyle: "preserve-3d" 
+        }}
+        className={`relative w-full max-w-6xl h-[70vh] md:h-[65vh] rounded-[2.5rem] border border-white/10 flex flex-col justify-between overflow-hidden group cursor-none ${proj.bgClass}`}
       >
-        {/* Optional overlay for the future block */}
-        {proj.isFuture && <div className="absolute inset-0 bg-[#007BFF]/10 blur-3xl opacity-50 pointer-events-none" />}
+        {/* Interaction layer: Spotlight */}
+        <motion.div 
+          className="absolute w-[800px] h-[800px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"
+          style={{
+            top: spotlightTop,
+            left: spotlightLeft,
+            x: "-50%",
+            y: "-50%",
+            background: `radial-gradient(circle, ${proj.accentColor.replace('0.2', '0.4').replace('0.1', '0.2')} 0%, transparent 70%)`,
+            filter: "blur(80px)",
+          }}
+        />
 
-        <div className="relative z-10 p-6 md:p-12 flex justify-between items-start">
-          <div>
-            <h3 className="font-heading text-3xl md:text-5xl lg:text-7xl uppercase font-black text-white drop-shadow-2xl z-10 relative break-words">
-              {proj.title}
-            </h3>
-            <p className="mt-4 font-mono text-[#666666] text-sm md:text-base lg:text-2xl uppercase tracking-widest">{proj.description}</p>
-          </div>
-        </div>
+        {/* Global Accent Glow */}
+        <div 
+          className="absolute inset-0 opacity-20 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity duration-1000" 
+          style={{ background: `radial-gradient(circle at 100% 0%, ${proj.accentColor} 0%, transparent 50%)` }}
+        />
         
-        <div className="relative z-10 p-6 md:p-12 border-t border-white/10 bg-black/50 backdrop-blur-md">
-          {proj.isFuture ? (
-            <a href={proj.link} target="_blank" rel="noreferrer" className="font-mono text-[#007BFF] text-lg md:text-xl lg:text-4xl hover:underline break-all">
-              Написать в Telegram → @Darkstoic
-            </a>
-          ) : (
-            <a href={`https://${proj.domain}`} target="_blank" rel="noreferrer" className="font-mono text-white hover:text-[#007BFF] transition-colors text-lg md:text-xl lg:text-3xl underline underline-offset-4 break-all">
-              {proj.domain}
-            </a>
-          )}
-        </div>
+        {proj.isFuture && <div className="absolute inset-0 bg-[#007BFF]/10 blur-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity" />}
+
+        {/* Inner Content Wrapper for Tilt */}
+        <motion.div 
+          style={{ 
+            rotateX: tiltX, 
+            rotateY: tiltY,
+            transformStyle: "preserve-3d",
+            height: "100%",
+            width: "100%"
+          }}
+          className="relative flex flex-col justify-between z-30"
+        >
+          <div className="p-8 md:p-16 flex justify-between items-start">
+            <div style={{ transform: "translateZ(100px)" }}>
+              <h3 className="font-heading text-4xl md:text-6xl lg:text-8xl uppercase font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] leading-tight">
+                {proj.title}
+              </h3>
+              <p className="mt-6 font-mono text-[#888] text-sm md:text-xl lg:text-3xl uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-500">
+                {proj.description}
+              </p>
+            </div>
+            
+            <div 
+              style={{ transform: "translateZ(50px)" }}
+              className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#007BFF]/50 transition-colors duration-500"
+            >
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-[#007BFF] rounded-full group-hover:scale-150 transition-transform duration-500 shadow-[0_0_20px_#007BFF]" />
+            </div>
+          </div>
+          
+          <div className="p-8 md:p-16 flex items-end justify-between">
+            <div style={{ transform: "translateZ(80px)" }} className="flex flex-col gap-2">
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#444] group-hover:text-[#888] transition-colors">Experience / 0{index + 1}</span>
+              {proj.isFuture ? (
+                <a href={proj.link} target="_blank" rel="noreferrer" className="flex items-center gap-4 group/btn">
+                  <span className="font-mono text-[#007BFF] text-xl md:text-2xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#007BFF] to-blue-300">
+                    Начать проект
+                  </span>
+                  <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-[#007BFF] flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-500">
+                    <ChevronRight className="w-5 h-5 md:w-10 md:h-10 text-white" />
+                  </div>
+                </a>
+              ) : (
+                <a href={`https://${proj.domain}`} target="_blank" rel="noreferrer" className="font-mono text-white/50 hover:text-white transition-all text-xl md:text-2xl lg:text-5xl group-hover:tracking-wider transition-all duration-700">
+                  {proj.domain}
+                </a>
+              )}
+            </div>
+
+            {/* Custom Interactive Cursor inside card (only on hover) */}
+            <motion.div
+              style={{
+                top: spotlightTop,
+                left: spotlightLeft,
+                x: "-50%",
+                y: "-50%",
+              }}
+              className="absolute w-16 h-16 rounded-full border border-[#007BFF]/30 backdrop-blur-md pointer-events-none z-50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 transform-gpu"
+            >
+              <div className="w-1.5 h-1.5 bg-[#007BFF] rounded-full shadow-[0_0_15px_#007BFF]" />
+            </motion.div>
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );
@@ -465,28 +579,32 @@ const ProjectsSection = () => {
       title: "Personal Brand",
       domain: "farrukh-adizov-porfolio.vercel.app",
       description: "Креативный хаос и эстетика",
-      bgClass: "bg-gradient-to-br from-purple-900/40 to-[#050505]",
+      bgClass: "bg-[#050505] bg-grid-pattern",
+      accentColor: "rgba(147, 51, 234, 0.2)", // Purple
       isFuture: false
     },
     {
       title: "Web Studio",
       domain: "adizovstudio.ru",
       description: "Чистый корпоративный AI-стиль",
-      bgClass: "bg-grid-pattern",
+      bgClass: "bg-[#050505] bg-grid-pattern",
+      accentColor: "rgba(0, 123, 255, 0.2)", // Blue
       isFuture: false
     },
     {
       title: "Tech Store",
       domain: "istore34.ru",
       description: "Премиальный ритейл",
-      bgClass: "bg-[radial-gradient(circle_at_top_right,_#222_0%,_#050505_100%)]",
+      bgClass: "bg-[#050505] bg-grid-pattern",
+      accentColor: "rgba(255, 255, 255, 0.1)", // White/Grey
       isFuture: false
     },
     {
-      title: "Место для вашего проекта",
+      title: "Ваш проект",
       domain: "Инициализировать соединение",
       description: "Станьте частью будущего",
-      bgClass: "bg-[#007BFF]/5",
+      bgClass: "bg-[#050505] bg-grid-pattern",
+      accentColor: "rgba(0, 123, 255, 0.3)",
       isFuture: true,
       link: "https://t.me/Darkstoic"
     }
@@ -519,7 +637,7 @@ const ContactsSection = () => {
   const contacts = [
     {
       name: "Фаррух Адизов",
-      role: "Lead Web-Designer / AI Engineer",
+      role: "Lead AI Creator / AI Engineer",
       tg: "@Darkstoic",
       tgLink: "https://t.me/Darkstoic",
       phone: "+79998987849",
@@ -527,7 +645,7 @@ const ContactsSection = () => {
     },
     {
       name: "Сергей Олейников",
-      role: "AI Architect / Developer",
+      role: "Business Lead",
       tg: "@sergei_oleinikov",
       tgLink: "https://t.me/sergei_oleinikov",
       phone: "+79020930167",
@@ -606,6 +724,14 @@ export default function App() {
   const handleDesktopScrollTo = (id: string) => {
     scrollToElement(id);
   };
+
+  // Force scroll to top on refresh and disable auto-restoration
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   // Initialize Lenis Smooth Scrolling
   useEffect(() => {
