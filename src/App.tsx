@@ -20,12 +20,82 @@ export const scrollToElement = (id: string) => {
 
 /** --- UTILITY COMPONENTS --- */
 
+const FSLogo = ({ className = "" }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" className={className}>
+    <defs>
+      <linearGradient id="fs-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#80BFFF" />
+        <stop offset="50%" stopColor="#007BFF" />
+        <stop offset="100%" stopColor="#003D80" />
+      </linearGradient>
+      <linearGradient id="fs-text" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="100%" stopColor="#80BFFF" />
+      </linearGradient>
+      <filter id="glow-heavy" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="12" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+      <filter id="glow-light" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+
+    {/* Hexagon core frame representing engineering / web architecture */}
+    <path d="M 200 50 L 312.5 115 L 312.5 245 L 200 310 L 87.5 245 L 87.5 115 Z" fill="none" stroke="#007BFF" strokeWidth="3" opacity="0.4" filter="url(#glow-light)" />
+
+    {/* Micro Particles within the core */}
+    <g fill="#007BFF" filter="url(#glow-light)">
+      <circle cx="160" cy="110" r="1.5"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="3s" repeatCount="indefinite" /></circle>
+      <circle cx="240" cy="90" r="2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="4s" repeatCount="indefinite" /><animate attributeName="cy" values="90;85;90" dur="5s" repeatCount="indefinite" /></circle>
+      <circle cx="280" cy="140" r="1"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite" /></circle>
+      <circle cx="120" cy="200" r="1.5"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="3.5s" repeatCount="indefinite" /></circle>
+      <circle cx="250" cy="220" r="2.5"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.5s" repeatCount="indefinite" /><animate attributeName="cy" values="220;210;220" dur="6s" repeatCount="indefinite" /></circle>
+      <circle cx="180" cy="260" r="1.5"><animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" /></circle>
+      <circle cx="230" cy="270" r="1"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" /></circle>
+      <circle cx="140" cy="150" r="2"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="5s" repeatCount="indefinite" /><animate attributeName="cy" values="150;140;150" dur="7s" repeatCount="indefinite" /></circle>
+      <circle cx="290" cy="200" r="1.5"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="4.5s" repeatCount="indefinite" /></circle>
+      <circle cx="105" cy="150" r="1.5"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="2.8s" repeatCount="indefinite" /></circle>
+      <circle cx="160" cy="210" r="2"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="3.2s" repeatCount="indefinite" /><animate attributeName="cy" values="210;205;210" dur="4s" repeatCount="indefinite" /></circle>
+      <circle cx="270" cy="170" r="1.5"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.3s" repeatCount="indefinite" /></circle>
+      <circle cx="210" cy="110" r="1"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="4.2s" repeatCount="indefinite" /></circle>
+    </g>
+
+    {/* Inner shadow/glass geometry */}
+    <polygon points="120,180 150,110 250,110 210,180" fill="url(#fs-glow)" opacity="0.2" filter="url(#glow-heavy)"/>
+    <polygon points="190,250 150,180 250,180 280,250" fill="url(#fs-glow)" opacity="0.2" filter="url(#glow-heavy)"/>
+
+    {/* Connective architecture lines */}
+    <line x1="50" y1="180" x2="350" y2="180" stroke="#007BFF" strokeWidth="1" strokeDasharray="3 6" opacity="0.5" />
+    <line x1="200" y1="20" x2="200" y2="340" stroke="#007BFF" strokeWidth="1" strokeDasharray="3 6" opacity="0.5" />
+
+    {/* Typography - Precision crafted lettering */}
+    <g textAnchor="middle" filter="url(#glow-light)">
+      <text x="135" y="215" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="105" fill="#FFFFFF" letterSpacing="-2">F</text>
+      
+      <text x="200" y="205" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="300" fontSize="50" fill="#007BFF" opacity="0.9">&amp;</text>
+      
+      <text x="265" y="215" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="105" fill="url(#fs-text)" letterSpacing="-2">S</text>
+    </g>
+    
+    {/* Studio sub-text */}
+    <text x="205" y="375" fontFamily="monospace" fontWeight="bold" fontSize="24" fill="#888888" letterSpacing="12" textAnchor="middle">STUDIO</text>
+    
+    {/* Highlight Nodes */}
+    <circle cx="200" cy="50" r="5" fill="#007BFF" filter="url(#glow-light)" />
+    <circle cx="200" cy="310" r="5" fill="#007BFF" filter="url(#glow-light)" />
+    <circle cx="87.5" cy="180" r="5" fill="#007BFF" filter="url(#glow-light)" />
+    <circle cx="312.5" cy="180" r="5" fill="#007BFF" filter="url(#glow-light)" />
+  </svg>
+);
+
 const StaggeredText = ({ text, className, as: Component = "h1" }: { text: string; className?: string, as?: any }) => {
   const words = text.split(" ");
   return (
     <Component className={className}>
       {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden mr-3 mb-2">
+        <span key={i} className="inline-block overflow-hidden mr-2 sm:mr-4 mb-1 sm:mb-2 md:mb-4">
           <motion.span
             initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -129,22 +199,54 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent z-10">
-      <div className="relative w-full max-w-6xl px-6 flex flex-col justify-center h-full pt-24 md:pt-32">
-        <div className="max-w-4xl">
-          <StaggeredText 
-            as="h1"
-            text="Пространство будущего"
-            className="text-4xl md:text-6xl lg:text-8xl font-bold font-heading text-white tracking-tight uppercase leading-[0.9] mb-8 break-words"
-          />
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-8">
+      <div className="relative w-full max-w-7xl flex flex-col justify-center h-full pt-24 md:pt-32">
+        <div className="max-w-5xl">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-black font-heading tracking-tighter uppercase leading-[0.85] mb-6 md:mb-10 break-words flex flex-wrap">
+            <span className="inline-block overflow-visible relative mr-2 sm:mr-4 mb-1 sm:mb-2 md:mb-4">
+              <motion.span
+                initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.8, delay: 0, ease: "easeOut" }}
+                className="inline-block text-white relative z-10"
+              >
+                Пространство
+              </motion.span>
+            </span>
+            <span className="inline-block overflow-visible relative mr-2 sm:mr-4 mb-1 sm:mb-2 md:mb-4">
+              <motion.span
+                initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                className="inline-block relative"
+              >
+                {/* Glow layer for soft pulsing */}
+                <motion.span
+                  animate={{ opacity: [0.3, 0.8, 0.3], scale: [0.95, 1.05, 0.95] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#007BFF] blur-xl z-0"
+                  aria-hidden="true"
+                >
+                  будущего
+                </motion.span>
+                <motion.span
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-block relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#007BFF]"
+                >
+                  будущего
+                </motion.span>
+              </motion.span>
+            </span>
+          </h1>
           
           <motion.p 
             initial={{ opacity: 0, filter: "blur(10px)", x: -20 }}
             animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="text-[#666666] font-inter text-lg md:text-2xl lg:text-3xl max-w-2xl leading-relaxed mb-12 border-l-2 border-[#007BFF] pl-4 md:pl-6"
+            className="text-[#888888] font-inter text-base sm:text-lg md:text-2xl lg:text-3xl max-w-3xl leading-snug lg:leading-tight mb-12 border-l-[3px] border-[#007BFF] pl-5 md:pl-8"
           >
-            Дизайн-инженерия нового поколения: где каждый пиксель обоснован алгоритмом.
+            Дизайн-инженерия нового поколения: где каждый пиксель обоснован алгоритмом, а каждый алгоритм — искусством.
           </motion.p>
           
           <motion.div
@@ -155,16 +257,17 @@ const HeroSection = () => {
             <MagneticButton onClick={scrollToContacts}>
               <motion.div 
                 animate={{ 
-                  boxShadow: ["0px 0px 0px 0px rgba(0,123,255,0)", "0px 0px 20px 4px rgba(0,123,255,0.6)", "0px 0px 0px 0px rgba(0,123,255,0)"],
-                  borderColor: ["rgba(0,123,255,0.3)", "rgba(0,123,255,1)", "rgba(0,123,255,0.3)"]
+                  boxShadow: ["0px 0px 0px 0px rgba(0,123,255,0)", "0px 0px 30px 5px rgba(0,123,255,0.4)", "0px 0px 0px 0px rgba(0,123,255,0)"],
+                  borderColor: ["rgba(0,123,255,0.2)", "rgba(0,123,255,0.8)", "rgba(0,123,255,0.2)"]
                 }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="group relative inline-flex items-center gap-4 px-6 md:px-8 py-3 md:py-4 bg-[#007BFF]/5 border border-[#007BFF]/50 rounded-full overflow-hidden transition-all"
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="group relative inline-flex items-center gap-4 px-8 md:px-10 py-4 md:py-5 bg-black/40 backdrop-blur-md border border-[#007BFF]/50 rounded-full overflow-hidden transition-all"
               >
-                <div className="absolute inset-0 bg-[#007BFF] opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                <span className="font-heading text-base md:text-lg tracking-wide uppercase text-white relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,1)] transition-all">
-                  Обсудить проект →
+                <div className="absolute inset-0 bg-gradient-to-r from-[#007BFF]/10 to-[#00FFFF]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="font-heading text-sm sm:text-base md:text-lg font-medium tracking-[0.15em] uppercase text-white/90 relative z-10 group-hover:text-white group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all">
+                  Обсудить проект
                 </span>
+                <ChevronRight className="w-5 h-5 text-[#007BFF] group-hover:text-[#00FFFF] group-hover:translate-x-1 transition-all z-10 relative" />
               </motion.div>
             </MagneticButton>
           </motion.div>
@@ -174,79 +277,172 @@ const HeroSection = () => {
   );
 };
 
-// 2. Блок: About (О студии)
+// 2. Блок: About (О студии) - Scroll Reveal Concept
+const ScrollWord: React.FC<{ word: string, progress: any, start: number, end: number }> = ({ word, progress, start, end }) => {
+  const opacity = useTransform(progress, [start, end], [0.15, 1]);
+  const filter = useTransform(progress, [start, end], ["blur(12px)", "blur(0px)"]);
+  
+  const highlightWords = ["F&S", "Studio", "экосистемы,", "иммерсивные", "архитектуры.", "цифровые", "инженерный"];
+  const color = highlightWords.includes(word) ? "#007BFF" : "#FFFFFF";
+
+  return (
+    <motion.span style={{ opacity, filter, color }} className="inline-block hover:text-[#00FFFF] hover:drop-shadow-[0_0_15px_rgba(0,255,255,0.5)] transition-all duration-300">
+      {word}&nbsp;
+    </motion.span>
+  );
+};
+
 const AboutSection = () => {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const yText = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
-  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 50%"] });
+
+  // Вариант 1 (Техно-эстетика):
+  const text = "F&S Studio — инженерный подход к эстетике. Мы разрабатываем цифровые экосистемы, которые захватывают внимание с первых секунд. Наша специализация — иммерсивные интерфейсы, генеративный дизайн и сложные веб архитектуры.";
+  
+  const words = text.split(" ");
 
   return (
-    <section id="about" ref={ref} className="relative min-h-screen py-20 md:py-32 flex items-center bg-[#050505] overflow-hidden perspective-1000 z-20">
-      {/* Background lens grid */}
-      <motion.div 
-        style={{ y: yBg, rotateX: "10deg", scale: 1.1 }} 
-        className="absolute inset-0 bg-grid-pattern opacity-30 transform-gpu origin-top"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+    <section id="about" ref={ref} className="relative min-h-[150vh] bg-[#050505] z-20 py-20 md:py-32 px-4 md:px-8 flex items-start justify-center" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
+      {/* Subtle Background Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,123,255,0.04)_0%,transparent_60%)] pointer-events-none" />
       
-      <motion.div 
-        style={{ y: yText }} 
-        className="container mx-auto px-6 relative z-10"
-      >
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.h2 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="text-2xl md:text-4xl lg:text-5xl font-inter leading-[1.4] text-white font-light"
-          >
-            <span className="font-heading font-semibold text-[#007BFF]">F & S</span> — это симбиоз визуального искусства и нейронных вычислений. Мы проектируем цифровые миры, которые не просто выглядят красиво, а <span className="text-[#666666] italic">взаимодействуют на уровне инстинктов</span>.<br/><br/>
-            Наша специализация — иммерсивные интерфейсы и генеративный дизайн.
-          </motion.h2>
+      <div className="sticky top-1/4 max-w-6xl mx-auto flex flex-col gap-10 w-full mt-[10vh]">
+        <div className="flex items-center gap-4 text-[#007BFF] font-mono text-xs sm:text-sm uppercase tracking-[0.2em] opacity-80">
+          <span className="w-8 sm:w-16 h-[1px] bg-[#007BFF]"></span>
+          [ О студии ]
         </div>
-      </motion.div>
+        
+        <div className="flex flex-wrap text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-inter font-light leading-[1.2] tracking-tight">
+          {words.map((word, i) => {
+            const start = i / words.length;
+            const end = start + (1 / words.length);
+            return (
+              <ScrollWord 
+                key={i} 
+                word={word} 
+                progress={scrollYProgress} 
+                start={start} 
+                end={end} 
+              />
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 };
 
-// 3. Блок: Manifesto (Манифест)
+// 3. Блок: Manifesto (Манифест) - Neural Timeline Concept
+
+const ManifestoCard: React.FC<{ item: any; isEven: boolean }> = ({ item, isEven }) => {
+  const cardRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Dynamic animation values tracking scroll position
+  const opacity = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.1, 1, 1, 0.1]);
+  const scale = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.95, 1.02, 1.02, 0.95]);
+  const glow = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 1, 1, 0]);
+  
+  // Transform glow numeric value into CSS strings
+  const bgGlow = useTransform(glow, v => `rgba(0, 123, 255, ${v * 0.1})`);
+  const borderColor = useTransform(glow, v => `rgba(0, 123, 255, ${v * 0.4 + 0.05})`);
+  const nodeColor = useTransform(glow, v => v > 0.8 ? '#00FFFF' : '#050505');
+
+  return (
+    <div ref={cardRef} className={`w-full flex flex-col md:flex-row ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} relative items-start md:items-center py-6 md:py-10`}>
+      {/* Node Point Overlaying the Line */}
+      <motion.div 
+        style={{ scale: useTransform(glow, [0, 1], [1, 1.8]), backgroundColor: nodeColor }}
+        className="hidden md:block absolute left-1/2 w-3 h-3 border border-[#007BFF] rounded-full drop-shadow-[0_0_15px_#007BFF] -translate-x-1/2 z-20 transition-colors duration-300"
+      />
+      
+      {/* Mobile Node Point */}
+      <motion.div 
+        style={{ scale: useTransform(glow, [0, 1], [1, 1.5]), backgroundColor: nodeColor }}
+        className="md:hidden absolute left-[20px] w-2 h-2 border border-[#007BFF] rounded-full drop-shadow-[0_0_10px_#007BFF] -translate-x-1/2 z-20 mt-[44px] transition-colors duration-300"
+      />
+
+      {/* Content */}
+      <div className={`w-full pl-12 md:pl-0 md:w-1/2 ${isEven ? 'md:pr-20 text-left md:text-right' : 'md:pl-20 text-left'}`}>
+        <motion.div
+           style={{ opacity, scale, borderColor }}
+           className="bg-[#050505]/50 backdrop-blur-xl border transition-colors duration-300 rounded-[2rem] p-8 md:p-12 relative group overflow-hidden"
+        >
+           <motion.div style={{ opacity: glow }} className="absolute inset-0 bg-gradient-to-b from-[#007BFF]/10 to-transparent pointer-events-none blur-3xl" />
+           <motion.div style={{ backgroundColor: bgGlow }} className="absolute inset-0 pointer-events-none transition-colors" />
+
+           <div className={`font-mono text-[#007BFF]/80 text-xs sm:text-sm uppercase tracking-[0.2em] mb-4 md:mb-6 ${isEven ? 'md:justify-end' : 'md:justify-start'} flex items-center gap-3 relative z-10`}>
+              <span className="w-8 h-[1px] bg-[#007BFF]/50"></span>
+              {item.id}
+           </div>
+
+           <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-white mb-3 sm:mb-5 leading-tight transition-all relative z-10 group-hover:text-[#00FFFF] group-hover:drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]">
+             {item.title}
+           </h3>
+           <p className="text-[#888888] font-inter font-light text-sm sm:text-base md:text-lg leading-relaxed relative z-10 group-hover:text-[#cccccc] transition-colors">
+             {item.desc}
+           </p>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 const ManifestoSection = () => {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start center", "end center"] });
-  const clipPathObject = useTransform(scrollYProgress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 50%"] });
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  const manifestoItems = [
+    {
+      id: "01",
+      title: "Логика как искусство",
+      desc: "Код — это наш холст. Мы верим, что красивый интерфейс рождается из безупречной математики и стройной архитектуры.",
+    },
+    {
+      id: "02",
+      title: "Оптимизация абсолюта",
+      desc: "Никаких лагов. Только 60FPS. Перформанс — это уважение к пользователю.",
+    },
+    {
+      id: "03",
+      title: "Функция формирует форму",
+      desc: "Анимация ради анимации мертва. Мы используем motion для направления фокуса и создания когнитивной связи.",
+    },
+    {
+      id: "04",
+      title: "Интеллект × Разум",
+      desc: "Мы объединяем генеративные алгоритмы и человеческую эмпатию, создавая абстракции, которые чувствуют.",
+    }
+  ];
 
   return (
-    <section id="manifesto" ref={ref} className="relative min-h-[120vh] flex items-center justify-center overflow-hidden bg-[#050505] z-20">
-      {/* Huge F & S background letter */}
-      <div className="absolute inset-0 flex items-center justify-center overflow-hidden opacity-5 pointer-events-none select-none">
-        <span className="font-heading text-[40vw] font-black leading-none text-white blur-[2px]">F&S</span>
-      </div>
+    <section id="manifesto" ref={ref} className="relative py-24 md:py-48 bg-[#050505] z-20 px-4 md:px-8 overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
+       <div className="max-w-6xl mx-auto relative cursor-default">
+          <div className="text-center mb-20 md:mb-32 flex flex-col items-center">
+             <h2 className="text-4xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-heading font-black text-white uppercase tracking-tighter drop-shadow-[0_0_30px_rgba(0,123,255,0.2)] leading-none">
+               Манифест
+             </h2>
+          </div>
 
-      <div className="relative z-10 max-w-7xl px-6 text-center">
-        <h2 className="text-4xl md:text-7xl lg:text-[7rem] font-heading font-black uppercase mb-12 tracking-tight flex flex-wrap justify-center items-center gap-2 md:gap-4">
-          <span>Интеллект</span> <span className="text-[#007BFF] mix-blend-screen">×</span> <span>Чистый разум</span>
-        </h2>
-        
-        <div className="relative mx-auto text-xl md:text-4xl lg:text-6xl font-inter leading-[1.3] font-semibold">
-          {/* Base muted text */}
-          <p className="text-[#666666]">
-            Мы не рисуем сайты, мы строим когнитивные мосты. Дизайн будущего — это не оболочка, это живая структура, управляемая логикой и эстетикой.
-          </p>
-          
-          {/* Highlighted text mapped to scroll via clip-path */}
-          <motion.p 
-            style={{ clipPath: clipPathObject }}
-            className="absolute top-0 left-0 w-full text-[#007BFF] drop-shadow-[0_0_30px_rgba(0,123,255,0.4)]"
-          >
-            Мы не рисуем сайты, мы строим когнитивные мосты. Дизайн будущего — это не оболочка, это живая структура, управляемая логикой и эстетикой.
-          </motion.p>
-        </div>
-      </div>
+          {/* Central Neural Line Background */}
+          <div className="absolute left-[20px] md:left-1/2 top-48 bottom-0 w-[1px] md:w-[2px] bg-white/[0.03] md:-translate-x-1/2" />
+          {/* Active Neural Line */}
+          <motion.div style={{ height: lineHeight }} className="absolute left-[20px] md:left-1/2 top-48 w-[1px] md:w-[2px] bg-gradient-to-b from-[#00FFFF] to-[#007BFF] md:-translate-x-1/2 shadow-[0_0_20px_#007BFF] origin-top z-10 [mask-image:linear-gradient(to_bottom,black_0%,black_80%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_80%,transparent_100%)]" />
+
+          <div className="flex flex-col gap-0 md:gap-12 relative z-20">
+            {manifestoItems.map((item, i) => (
+              <ManifestoCard key={item.id} item={item} isEven={i % 2 === 0} />
+            ))}
+          </div>
+       </div>
     </section>
   );
 };
+
 
 // 4. Блок: Технологии (Tech Stack)
 const TechStackSection = () => {
@@ -270,71 +466,73 @@ const TechStackSection = () => {
 
   const cards = [
     { 
-      category: "Frontend", 
-      icon: <Monitor className="w-8 h-8 text-[#007BFF]" />,
-      items: ["Next.js", "Three.js", "GSAP", "React", "Framer Motion"],
-      details: "Формируем визуальную часть с использованием передовых frontend-фреймворков и библиотек для 3D графики и плавной анимации. Каждый элемент оптимизирован для достижения 60 FPS на всех устройствах."
+      category: "Frontend // WebGL", 
+      icon: <Monitor className="w-8 h-8 md:w-10 md:h-10 text-[#007BFF]" />,
+      items: ["Three.js", "GSAP", "React", "Framer Motion", "Lenis", "Next.js"],
+      details: "Мы не верстаем сайты. Мы программируем клиентские архитектуры. Использование аппаратного ускорения, кастомных шейдеров (GLSL) и микроинтеракций позволяет нам выжимать стабильные 60 FPS на любых устройствах."
     },
     { 
-      category: "AI & Design", 
-      icon: <Cpu className="w-8 h-8 text-[#007BFF]" />,
-      items: ["Google AI Studio", "Stitch", "Antigravity", "Figma", "Midjourney"],
-      details: "Интегрируем генеративный ИИ в пайплайн проектирования. Автоматизируем рутину, генерируем визуальные концепты и программируем когнитивные узлы для интеллектуальных интерфейсов."
+      category: "AI & Generative", 
+      icon: <Cpu className="w-8 h-8 md:w-10 md:h-10 text-[#007BFF]" />,
+      items: ["Google AI Studio", "Antigravity", "Python", "Neural Models"],
+      details: "Генеративный дизайн и интеллект. Мы интегрируем AI напрямую в бизнес-логику и визуальный пайплайн, создавая адаптивные интерфейсы, которые подстраиваются под пользователя в реальном времени."
     },
     { 
       category: "Backend & Ops", 
-      icon: <Server className="w-8 h-8 text-[#007BFF]" />,
-      items: ["Node.js", "Vercel", "Firebase", "PostgreSQL", "Docker"],
-      details: "Строим надежные серверные решения и масштабируемые бессерверные архитектуры. Обеспечиваем высокую производительность, безопасность и безупречный деплой для каждого продукта."
+      icon: <Server className="w-8 h-8 md:w-10 md:h-10 text-[#007BFF]" />,
+      items: ["Node.js", "Firebase", "PostgreSQL", "Docker", "Vercel"],
+      details: "Безупречная серверная инфраструктура. Бессерверные архитектуры, реалтайм базы данных и мгновенный деплой. Мы строим backend, который выдержит любой скейлинг."
     }
   ];
 
   return (
-    <section id="tech" className="relative py-20 md:py-32 bg-transparent overflow-hidden flex items-center min-h-screen z-10">
-      <div className="container mx-auto px-6 relative z-10 w-full">
-        <div className="flex flex-col items-center gap-16">
-          <motion.h3 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-heading text-4xl md:text-5xl lg:text-7xl uppercase text-white font-bold text-center"
-          >
-            [ Технологии ]
-          </motion.h3>
+    <section id="tech" className="relative py-24 md:py-40 bg-transparent overflow-hidden flex items-center min-h-screen z-10">
+      <div className="container mx-auto px-4 md:px-8 relative z-10 w-full max-w-7xl">
+        <div className="flex flex-col gap-10 md:gap-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <motion.h3 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[7rem] uppercase text-white font-black leading-none tracking-tighter drop-shadow-[0_0_20px_rgba(0,123,255,0.15)]"
+            >
+              Стек
+            </motion.h3>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
             {cards.map((card, idx) => (
-              <div key={idx} onClick={() => setSelectedTech(idx)} className="cursor-pointer group">
+              <div key={idx} onClick={() => setSelectedTech(idx)} className="cursor-pointer group h-full">
                 <TiltCard className="h-full">
-                  <div className="flex flex-col p-8 md:p-10 h-full min-h-[350px] md:min-h-[450px] rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover:border-[#007BFF]/50 transition-all duration-500 relative overflow-hidden">
+                  <div className="flex flex-col p-8 md:p-12 h-full min-h-[400px] md:min-h-[500px] rounded-[2rem] bg-white/[0.015] border border-white/5 backdrop-blur-3xl shadow-[0_4px_30px_rgba(0,0,0,0.2)] hover:border-[#007BFF]/40 transition-all duration-500 relative overflow-hidden group-hover:bg-[#007BFF]/[0.02]">
                     
-                    <div className="absolute inset-0 bg-[#007BFF]/0 group-hover:bg-[#007BFF]/5 blur-2xl transition-all duration-700 rounded-3xl pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#007BFF]/0 via-transparent to-[#007BFF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                     
-                    <div className="flex justify-between items-start mb-8 relative z-10">
-                      <div className="p-3 bg-white/5 border border-white/10 rounded-2xl group-hover:bg-[#007BFF]/10 group-hover:border-[#007BFF]/30 transition-all duration-500">
+                    <div className="flex justify-between items-start mb-10 relative z-10">
+                      <div className="p-4 bg-black/40 border border-[#007BFF]/20 rounded-2xl group-hover:bg-[#007BFF]/20 group-hover:border-[#007BFF]/50 transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_20px_rgba(0,123,255,0.3)]">
                         {card.icon}
                       </div>
-                      <span className="font-mono text-xs uppercase tracking-widest text-[#444] group-hover:text-[#666]">0{idx + 1}</span>
+                      <span className="font-mono text-xs sm:text-sm uppercase tracking-widest text-[#444] group-hover:text-[#007BFF] transition-colors">0{idx + 1}</span>
                     </div>
 
-                    <h4 className="font-heading text-2xl md:text-3xl text-white uppercase tracking-tight relative z-10 mb-8">
+                    <h4 className="font-heading text-2xl md:text-3xl lg:text-4xl text-white uppercase tracking-tighter font-bold relative z-10 mb-6 leading-none">
                       {card.category}
                     </h4>
                     
                     <div className="flex flex-col gap-4 relative z-10 flex-grow">
                       {card.items.slice(0, 4).map((item, i) => (
                         <div key={i} className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 bg-[#007BFF] rounded-full opacity-40 group-hover:opacity-100 transition-opacity" />
-                          <span className="font-mono text-base md:text-lg text-[#888] group-hover:text-white transition-colors duration-300">
+                          <div className="w-1 h-1 bg-[#007BFF] rounded-full opacity-30 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#007BFF] transition-all" />
+                          <span className="font-inter font-light text-base md:text-lg text-[#777] group-hover:text-white transition-colors duration-300">
                             {item}
                           </span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
-                      <span className="font-mono text-xs uppercase tracking-widest text-[#666] group-hover:text-[#007BFF] transition-colors">Подробнее</span>
-                      <ChevronRight className="w-4 h-4 text-[#444] group-hover:text-[#007BFF] group-hover:translate-x-1 transition-all" />
+                    <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
+                      <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-[#666] group-hover:text-[#00FFFF] transition-colors">Подробности</span>
+                      <ChevronRight className="w-5 h-5 text-[#444] group-hover:text-[#00FFFF] group-hover:translate-x-2 transition-all" />
                     </div>
                   </div>
                 </TiltCard>
@@ -352,49 +550,52 @@ const TechStackSection = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-[#050505]/95 backdrop-blur-xl"
             style={{ perspective: 1200 }}
             onClick={() => setSelectedTech(null)}
           >
             <motion.div 
-              initial={{ scale: 0.4, opacity: 0, z: -400, rotateX: 15 }}
-              animate={{ scale: 1, opacity: 1, z: 0, rotateX: 0 }}
-              exit={{ scale: 0.4, opacity: 0, z: -400, rotateX: -15 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               onClick={e => e.stopPropagation()}
-              className="bg-black/90 border border-white/10 p-8 md:p-12 rounded-3xl w-full max-w-3xl relative max-h-[75vh] md:max-h-[85vh] overflow-y-auto overscroll-contain shadow-[0_0_50px_rgba(0,123,255,0.05)] ring-1 ring-white/5 flex flex-col"
+              className="bg-[#0A0A0A] border border-[#007BFF]/20 p-8 md:p-16 rounded-[2.5rem] w-full max-w-4xl relative max-h-[85vh] overflow-y-auto shadow-[0_0_80px_rgba(0,123,255,0.1)] flex flex-col"
             >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#007BFF] to-transparent opacity-50" />
               
-              <div className="flex-1 mt-2 md:mt-0">
-                <h3 className="font-heading text-3xl md:text-5xl uppercase text-white mb-6 pr-12 md:pr-0">
+              <div className="flex-1 mt-2 md:mt-0 relative z-10">
+                <div className="font-mono text-[#007BFF] text-sm tracking-[0.2em] mb-6 uppercase">
+                  Unit 0{selectedTech + 1}
+                </div>
+                <h3 className="font-heading text-3xl md:text-5xl lg:text-6xl uppercase font-black text-white mb-8 tracking-tighter leading-none">
                   {cards[selectedTech].category}
                 </h3>
-                <div className="flex flex-wrap gap-2 md:gap-3 mb-8">
+                <div className="flex flex-wrap gap-3 md:gap-4 mb-12">
                   {cards[selectedTech].items.map((item, i) => (
-                    <span key={i} className="px-4 py-2 border border-[#007BFF]/30 text-[#007BFF] bg-[#007BFF]/5 rounded-full font-mono text-sm md:text-base">
+                    <span key={i} className="px-5 py-2.5 border border-[#007BFF]/30 text-white bg-[#007BFF]/10 rounded-full font-mono text-sm md:text-base tracking-wide">
                       {item}
                     </span>
                   ))}
                 </div>
-                <p className="font-inter text-lg text-[#aaa] leading-relaxed mb-16">
+                <p className="font-inter font-light text-xl md:text-2xl text-[#aaa] leading-relaxed max-w-3xl">
                   {cards[selectedTech].details}
                 </p>
               </div>
 
-              {/* Pushed to bottom of the content flow */}
-              <div className="w-full flex justify-center mt-auto pt-6 border-t border-white/5">
+              {/* Close Button */}
+              <div className="w-full flex justify-center mt-12 pt-8 border-t border-white/5 relative z-10">
                 <motion.button 
                   onClick={() => setSelectedTech(null)}
-                  className="relative w-12 h-12 flex items-center justify-center group z-50 cursor-pointer"
-                  aria-label="Закрыть"
-                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.95, 1.05, 0.95] }}
+                  className="group flex flex-col items-center justify-center cursor-pointer"
+                  animate={{ opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.1, opacity: 1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  <div className="relative w-8 h-8 flex items-center justify-center">
-                    <span className="absolute w-full h-[2px] bg-[#007BFF] drop-shadow-[0_0_12px_rgba(0,123,255,0.9)] transform rotate-45 group-hover:bg-white group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,1)] transition-all duration-300"></span>
-                    <span className="absolute w-full h-[2px] bg-[#007BFF] drop-shadow-[0_0_12px_rgba(0,123,255,0.9)] transform -rotate-45 group-hover:bg-white group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,1)] transition-all duration-300"></span>
-                    {/* Energy core light on hover */}
-                    <span className="absolute w-1.5 h-1.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 shadow-[0_0_15px_white] scale-0 group-hover:scale-100"></span>
+                  <div className="relative w-12 h-12 flex items-center justify-center bg-transparent transition-all">
+                    <span className="absolute w-6 h-[2px] bg-white/50 group-hover:bg-[#007BFF] transform rotate-45 transition-colors duration-300 shadow-[0_0_10px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_15px_rgba(0,123,255,0.6)]"></span>
+                    <span className="absolute w-6 h-[2px] bg-white/50 group-hover:bg-[#007BFF] transform -rotate-45 transition-colors duration-300 shadow-[0_0_10px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_15px_rgba(0,123,255,0.6)]"></span>
                   </div>
                 </motion.button>
               </div>
@@ -472,6 +673,10 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onClick={() => {
+          const url = proj.link || `https://${proj.domain}`;
+          window.open(url, "_blank");
+        }}
         style={{ 
           scale, 
           rotateY: scrollRotateY, 
@@ -514,19 +719,12 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
         >
           <div className="p-8 md:p-16 flex justify-between items-start">
             <div style={{ transform: "translateZ(100px)" }}>
-              <h3 className="font-heading text-4xl md:text-6xl lg:text-8xl uppercase font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] leading-tight">
+              <h3 className="font-heading text-3xl md:text-5xl lg:text-7xl uppercase font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] leading-tight">
                 {proj.title}
               </h3>
-              <p className="mt-6 font-mono text-[#888] text-sm md:text-xl lg:text-3xl uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-500">
+              <p className="mt-4 font-mono text-[#888] text-xs md:text-lg lg:text-2xl uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-500">
                 {proj.description}
               </p>
-            </div>
-            
-            <div 
-              style={{ transform: "translateZ(50px)" }}
-              className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#007BFF]/50 transition-colors duration-500"
-            >
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-[#007BFF] rounded-full group-hover:scale-150 transition-transform duration-500 shadow-[0_0_20px_#007BFF]" />
             </div>
           </div>
           
@@ -579,32 +777,32 @@ const ProjectsSection = () => {
       title: "Personal Brand",
       domain: "farrukh-adizov-porfolio.vercel.app",
       description: "Креативный хаос и эстетика",
-      bgClass: "bg-[#050505] bg-grid-pattern",
-      accentColor: "rgba(147, 51, 234, 0.2)", // Purple
+      bgClass: "bg-[#050505] bg-[size:30px_30px]",
+      accentColor: "rgba(147, 51, 234, 0.25)", // Purple
       isFuture: false
     },
     {
       title: "Web Studio",
       domain: "adizovstudio.ru",
       description: "Чистый корпоративный AI-стиль",
-      bgClass: "bg-[#050505] bg-grid-pattern",
-      accentColor: "rgba(0, 123, 255, 0.2)", // Blue
+      bgClass: "bg-[#050505]",
+      accentColor: "rgba(0, 123, 255, 0.25)", // Blue
       isFuture: false
     },
     {
       title: "Tech Store",
       domain: "istore34.ru",
       description: "Премиальный ритейл",
-      bgClass: "bg-[#050505] bg-grid-pattern",
-      accentColor: "rgba(255, 255, 255, 0.1)", // White/Grey
+      bgClass: "bg-[#050505]",
+      accentColor: "rgba(255, 255, 255, 0.15)", // White/Grey
       isFuture: false
     },
     {
       title: "Ваш проект",
       domain: "Инициализировать соединение",
       description: "Станьте частью будущего",
-      bgClass: "bg-[#050505] bg-grid-pattern",
-      accentColor: "rgba(0, 123, 255, 0.3)",
+      bgClass: "bg-[#050505]",
+      accentColor: "rgba(0, 255, 255, 0.25)", // Cyan
       isFuture: true,
       link: "https://t.me/Darkstoic"
     }
@@ -616,8 +814,9 @@ const ProjectsSection = () => {
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden w-full">
         
         {/* Floating title above the timeline */}
-        <div className="absolute top-8 md:top-20 left-4 md:left-6 z-50 pointer-events-none">
-          <h2 className="font-heading text-3xl md:text-5xl text-white uppercase font-bold tracking-tight opacity-50">Избранные кейсы</h2>
+        <div className="absolute top-12 md:top-20 left-6 md:left-12 z-50 pointer-events-none flex items-center gap-4">
+          <span className="w-12 h-[2px] bg-[#007BFF]"></span>
+          <h2 className="font-heading text-base md:text-xl text-white uppercase font-bold tracking-[0.2em] opacity-80">Избранные проекты</h2>
         </div>
 
         <motion.div style={{ x }} className="flex w-[400vw] h-full items-center">
@@ -637,7 +836,7 @@ const ContactsSection = () => {
   const contacts = [
     {
       name: "Фаррух Адизов",
-      role: "Lead AI Creator / AI Engineer",
+      role: "Lead UI // AI Creator",
       tg: "@Darkstoic",
       tgLink: "https://t.me/Darkstoic",
       phone: "+79998987849",
@@ -645,7 +844,7 @@ const ContactsSection = () => {
     },
     {
       name: "Сергей Олейников",
-      role: "Business Lead",
+      role: "Business Lead // Integrator",
       tg: "@sergei_oleinikov",
       tgLink: "https://t.me/sergei_oleinikov",
       phone: "+79020930167",
@@ -654,42 +853,49 @@ const ContactsSection = () => {
   ];
 
   return (
-    <section id="contacts" className="py-20 md:py-32 bg-transparent min-h-screen flex items-center border-t border-[#111] z-10 relative">
-      <div className="container mx-auto px-6">
+    <section id="contacts" className="py-24 md:py-40 bg-transparent min-h-screen flex items-center relative z-10 w-full overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      
+      <div className="container mx-auto px-4 md:px-8 w-full max-w-7xl relative z-20">
         <div className="mb-16 md:mb-24">
-          <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase text-white tracking-widest break-words">
-            Архитекторы системы
+          <div className="font-mono text-[#007BFF] text-xs sm:text-sm uppercase tracking-[0.2em] mb-4 opacity-80">[ Architecture Core ]</div>
+          <h2 className="font-heading text-4xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-black uppercase text-white tracking-tighter leading-none">
+            Архитекторы
           </h2>
-          <div className="w-full h-px bg-white/10 mt-6 md:mt-8" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
           {contacts.map((c, i) => (
             <div 
               key={i}
-              className="flex flex-col relative z-20"
+              className="flex flex-col relative group"
             >
-              <h3 className="font-heading text-2xl md:text-4xl font-semibold text-white mb-2">{c.name}</h3>
-              <p className="font-inter text-[#666666] text-lg md:text-xl mb-8 md:mb-12">{c.role}</p>
+              <div className="absolute -left-4 md:-left-8 top-0 w-1 h-0 bg-[#007BFF] group-hover:h-full transition-all duration-500 ease-out" />
+              
+              <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4 group-hover:text-[#00FFFF] transition-colors duration-300 transform-gpu">{c.name}</h3>
+              <p className="font-mono text-[#007BFF] uppercase tracking-[0.1em] text-sm md:text-base mb-12">{c.role}</p>
 
-              <div className="space-y-4 md:space-y-6 font-mono text-base md:text-lg">
+              <div className="space-y-6 md:space-y-8 font-mono text-base md:text-xl font-light">
                 <MagneticButton>
-                  <a href={c.tgLink} target="_blank" rel="noreferrer" className="flex items-center gap-4 text-white hover:text-[#007BFF] transition-colors">
-                    <span className="text-[#666666]">TG:</span> {c.tg}
+                  <a href={c.tgLink} target="_blank" rel="noreferrer" className="flex items-center gap-6 text-[#ccc] hover:text-white transition-colors group/link w-fit">
+                    <span className="text-[#555] uppercase tracking-[0.2em] text-sm w-16">TG</span> 
+                    <span className="group-hover/link:translate-x-2 transition-transform duration-300">{c.tg}</span>
                   </a>
                 </MagneticButton>
-                <div className="w-full h-px bg-white/5" />
+                <div className="w-full max-w-md h-px bg-white/5" />
                 
                 <MagneticButton>
-                  <a href={`tel:${c.phone}`} className="flex items-center gap-4 text-white hover:text-[#007BFF] transition-colors">
-                    <span className="text-[#666666]">Тел:</span> {c.phone}
+                  <a href={`tel:${c.phone}`} className="flex items-center gap-6 text-[#ccc] hover:text-white transition-colors group/link w-fit">
+                    <span className="text-[#555] uppercase tracking-[0.2em] text-sm w-16">TEL</span> 
+                    <span className="group-hover/link:translate-x-2 transition-transform duration-300">{c.phone}</span>
                   </a>
                 </MagneticButton>
-                <div className="w-full h-px bg-white/5" />
+                <div className="w-full max-w-md h-px bg-white/5" />
 
                 <MagneticButton>
-                  <a href={`mailto:${c.email}`} className="flex items-center gap-4 text-white hover:text-[#007BFF] transition-colors">
-                    <span className="text-[#666666]">Email:</span> {c.email}
+                  <a href={`mailto:${c.email}`} className="flex items-center gap-6 text-[#ccc] hover:text-white transition-colors group/link w-fit">
+                    <span className="text-[#555] uppercase tracking-[0.2em] text-sm w-16">MAIL</span> 
+                    <span className="group-hover/link:translate-x-2 transition-transform duration-300 break-all">{c.email}</span>
                   </a>
                 </MagneticButton>
               </div>
@@ -702,8 +908,8 @@ const ContactsSection = () => {
 };
 
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { name: "01 // Главная", shortName: "Главная", id: "hero" },
@@ -714,15 +920,15 @@ export default function App() {
     { name: "06 // Инженеры", shortName: "Контакты", id: "contacts" }
   ];
 
-  const handleScrollTo = (id: string) => {
-    setIsMenuOpen(false);
-    setTimeout(() => {
-      scrollToElement(id);
-    }, 600); // Increased timeout to wait for the extremely smooth exit animation
-  };
+  const [isScrollingTo, setIsScrollingTo] = useState(false);
 
-  const handleDesktopScrollTo = (id: string) => {
+  const handleScrollTo = (id: string) => {
+    setActiveSection(id);
+    setIsScrollingTo(true);
+    setIsMobileMenuOpen(false);
+    document.body.style.overflow = '';
     scrollToElement(id);
+    setTimeout(() => setIsScrollingTo(false), 1500);
   };
 
   // Force scroll to top on refresh and disable auto-restoration
@@ -741,7 +947,7 @@ export default function App() {
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.8, // makes the scroll feel heavier and more premium
+      wheelMultiplier: 0.8,
       touchMultiplier: 1.5,
     });
 
@@ -764,155 +970,170 @@ export default function App() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if ((window as any).isScrollingToFlag) return; // Prevent updates during programmatic scroll
+        
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveSection(entry.target.id);
           }
         });
       },
-      // trigger exactly when an element crosses the middle 20% vertical space of the screen
       { threshold: 0, rootMargin: "-40% 0px -40% 0px" } 
     );
 
-    menuItems.forEach((item) => {
-      const element = document.getElementById(item.id);
+    const observeIds = ["hero", ...menuItems.map(m => m.id)];
+    observeIds.forEach((id) => {
+      const element = document.getElementById(id);
       if (element) observer.observe(element);
     });
 
     return () => observer.disconnect();
   }, []);
 
-  // Lock body scroll when menu is open
+  // Sync state flag to a global variable so the effect callback can read it
   useEffect(() => {
-    if (isMenuOpen) {
+    (window as any).isScrollingToFlag = isScrollingTo;
+  }, [isScrollingTo]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-  }, [isMenuOpen]);
+  }, [isMobileMenuOpen]);
 
   return (
     // Solved X-axis scroll jumps without breaking top/sticky logic
     <div className="bg-[#050505] min-h-screen text-white selection:bg-[#007BFF] selection:text-white scroll-smooth w-full relative overflow-clip">
       
-      {/* Desktop Global Navigation (Floating Pill) */}
-      <div className="hidden md:block fixed top-8 left-1/2 -translate-x-1/2 z-[11000]">
-        <div className="bg-[#111]/60 backdrop-blur-xl border border-white/10 rounded-full p-2 shadow-[0_4px_30px_rgba(0,0,0,0.5)] flex items-center gap-1">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleDesktopScrollTo(item.id)}
-              className={`relative px-5 py-2.5 rounded-full font-mono text-xs xl:text-sm uppercase tracking-widest transition-colors ${
-                activeSection === item.id ? 'text-white' : 'text-[#666] hover:text-[#aaa]'
-              }`}
-            >
-              {activeSection === item.id && (
-                <motion.div
-                  layoutId="activeNavIndicator"
-                  className="absolute inset-0 bg-[#007BFF]/10 border border-[#007BFF]/50 rounded-full shadow-[0_0_15px_rgba(0,123,255,0.4)]"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              {activeSection === item.id && (
-                <motion.div
-                  layoutId="activeNavGlow"
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-[#007BFF] drop-shadow-[0_0_8px_rgba(0,123,255,1)]"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10">{item.shortName}</span>
-            </button>
-          ))}
+      {/* Mobile Top Gradient (Vignette) for Logo readability */}
+      <div 
+        className="md:hidden fixed top-0 left-0 w-full h-40 z-[10900] pointer-events-none bg-gradient-to-b from-[#050505]/90 via-[#050505]/50 to-transparent"
+        style={{ 
+          backdropFilter: 'blur(8px)', 
+          WebkitBackdropFilter: 'blur(8px)',
+          maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', 
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' 
+        }}
+      />
+
+      {/* Main Logo */}
+      <div className="fixed top-4 md:top-6 left-4 md:left-6 z-[11500] cursor-pointer group" onClick={() => handleScrollTo('hero')}>
+        <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+          <FSLogo className="w-full h-full drop-shadow-[0_0_15px_rgba(26,123,255,0.4)] group-hover:drop-shadow-[0_0_25px_rgba(0,255,255,0.6)] transition-all duration-500" />
         </div>
       </div>
-      
-      {/* Mobile Global Navigation (Burger Button completely borderless) */}
-      <div className="fixed top-6 right-6 md:hidden z-[11000]">
+
+      {/* Global Vertical Timeline Navigation (Desktop Only) */}
+      <nav className="hidden md:flex fixed right-0 top-0 bottom-0 z-[11000] w-20 hover:w-64 flex-col justify-center items-end py-20 group transition-all duration-500 pointer-events-none">
+        
+        {/* Neon Line */}
+        <div className="absolute right-3 md:right-10 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent group-hover:via-[#007BFF]/30 transition-colors duration-500">
+          <motion.div 
+            className="absolute top-0 w-full h-[30vh] bg-gradient-to-b from-transparent via-[#00FFFF] to-transparent opacity-50"
+            animate={{ y: ["-100vh", "100vh"] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+
+        <div className="relative w-full flex flex-col justify-between h-[40vh] md:h-[60vh] items-end pointer-events-auto">
+          {menuItems.map((item, idx) => {
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleScrollTo(item.id)}
+                className="relative group/item flex items-center h-12 w-full cursor-pointer pr-10 md:pr-20 outline-none justify-end"
+              >
+                {/* Labels (visible on hover for desktop, hidden on mobile) */}
+                <div className="hidden md:flex flex-1 justify-end overflow-hidden">
+                  <span className={`font-mono text-sm uppercase tracking-[0.2em] whitespace-nowrap opacity-0 md:group-hover:opacity-100 transition-all duration-500 transform translate-x-4 md:group-hover:translate-x-0 ${isActive ? 'text-[#00FFFF] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-[#888] md:group-hover/item:text-white'}`}>
+                    {item.shortName}
+                  </span>
+                </div>
+
+                {/* Number (hidden on mobile, visible on desktop) */}
+                <div className="hidden md:flex absolute right-14 items-center pr-2 font-mono text-[10px] pointer-events-none">
+                  <span className={`transition-colors duration-300 ${isActive ? 'text-[#00FFFF] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-[#555] md:group-hover:text-[#aaa]'}`}>
+                    0{idx + 1}
+                  </span>
+                </div>
+
+                {/* Node */}
+                <div className="absolute right-3 md:right-10 w-[1px] flex justify-center items-center pointer-events-none">
+                  {isActive ? (
+                    <div className="relative w-1.5 md:w-2 h-1.5 md:h-2 bg-[#00FFFF] rounded-full shadow-[0_0_10px_rgba(0,255,255,0.8)] md:group-hover/item:scale-125 transition-transform duration-300">
+                      <motion.div 
+                        layoutId="activeVertGlow"
+                        className="absolute -inset-1.5 md:-inset-2 rounded-full border border-[#00FFFF] opacity-50 shadow-[0_0_15px_rgba(0,255,255,0.6)]"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#555] md:group-hover/item:bg-[#007BFF] transition-all duration-300 shadow-[0_0_5px_rgba(0,123,255,0.2)] md:group-hover/item:scale-150 transform" />
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* Mobile Floating Action Button */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[11500]">
         <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="relative w-12 h-12 flex flex-col items-center justify-center gap-2 group outline-none"
-        >          
-          <motion.div 
-            animate={isMenuOpen ? { rotate: 45, y: 10 } : { rotate: 0, y: 0 }}
-            className={`w-8 h-[2px] ${isMenuOpen ? 'bg-white' : 'bg-[#007BFF]'} origin-center transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,123,255,0.5)]`} 
-          />
-          <motion.div 
-            animate={isMenuOpen ? { opacity: 0, scale: 0 } : { opacity: 1, scale: 1 }}
-            className={`w-8 h-[2px] ${isMenuOpen ? 'bg-white' : 'bg-[#007BFF]'} transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,123,255,0.5)]`} 
-          />
-          <motion.div 
-            animate={isMenuOpen ? { rotate: -45, y: -10 } : { rotate: 0, y: 0 }}
-            className={`w-8 h-[2px] ${isMenuOpen ? 'bg-white' : 'bg-[#007BFF]'} origin-center transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,123,255,0.5)]`} 
-          />
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="bg-[#111]/80 backdrop-blur-2xl border border-white/10 rounded-full px-5 py-3.5 flex items-center gap-3 shadow-[0_4px_30px_rgba(0,0,0,0.8)] active:scale-95 transition-transform"
+        >
+          <div className="relative w-4 h-3.5 flex flex-col justify-between">
+            <span className={`w-full h-[1.5px] bg-white transition-all transform duration-300 origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
+            <span className={`w-full h-[1.5px] bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'}`} />
+            <span className={`w-full h-[1.5px] bg-white transition-all transform duration-300 origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
+          </div>
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white">Menu</span>
         </button>
       </div>
 
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
-        {isMenuOpen && (
+        {isMobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(24px)' }}
-            exit={{ opacity: 0, transition: { duration: 0.7, ease: "easeInOut" } }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[10500] bg-[#050505]/95 flex flex-col items-center justify-center p-6"
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="md:hidden fixed inset-0 z-[11000] bg-[#050505]/80 backdrop-blur-2xl flex flex-col justify-end"
           >
-            {/* Background decorative typography */}
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, filter: "blur(20px)" }}
-              animate={{ scale: 1, opacity: 0.05, filter: "blur(0px)" }}
-              exit={{ opacity: 0, transition: { duration: 0.5 } }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none"
-            >
-              <span className="font-heading text-[30vw] font-black leading-none text-white whitespace-nowrap">F & S</span>
-            </motion.div>
-
-            <nav className="relative z-10 w-full max-w-2xl flex flex-col justify-center items-center gap-6 md:gap-8">
-              {menuItems.map((item, i) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleScrollTo(item.id)}
-                  initial={{ opacity: 0, y: 30, filter: "blur(15px)", scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
-                  exit={{ 
-                    opacity: 0, 
-                    y: 20, 
-                    filter: "blur(10px)", 
-                    transition: { duration: 0.4, delay: i * 0.03, ease: "easeOut" } 
-                  }}
-                  transition={{ 
-                    duration: 0.6,
-                    delay: 0.1 + i * 0.06, 
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
-                  className={`font-mono text-2xl md:text-4xl uppercase tracking-[0.2em] transition-all duration-300 relative group ${
-                    activeSection === item.id 
-                      ? "text-white" 
-                      : "text-white/50 hover:text-white"
-                  }`}
-                >
-                  <span className={activeSection === item.id ? "drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]" : ""}>
-                    {item.name}
-                  </span>
-                  {/* Neon underline effect on hover AND active list item */}
-                  <span className={`absolute -bottom-2 left-0 h-[2px] bg-[#007BFF] transition-all duration-500 drop-shadow-[0_0_10px_rgba(0,123,255,1)] ${
-                    activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
-                  }`} />
-                </motion.button>
-              ))}
-            </nav>
-            
-            {/* Contact links at menu bottom */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: 20, filter: "blur(10px)", transition: { duration: 0.4, delay: 0 } }}
-              transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-12 flex gap-8 font-mono text-sm md:text-base uppercase tracking-widest text-[#666]"
-            >
-              <a href="https://t.me/Darkstoic" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Telegram //</a>
-              <a href="mailto:adizov.farrux@gmail.com" className="hover:text-white transition-colors">Email //</a>
-            </motion.div>
+            <div className="p-4 pb-28 w-full bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent">
+              <div className="flex flex-col gap-2 relative">
+                {/* Accent glow behind menu items */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#007BFF]/10 blur-[80px] pointer-events-none rounded-full" />
+                
+                {menuItems.map((item, idx) => {
+                  const isActive = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleScrollTo(item.id)}
+                      className={`relative flex items-center justify-between px-6 py-4 rounded-2xl border transition-all duration-300 ${
+                        isActive 
+                          ? 'border-[#00FFFF]/30 bg-[#00FFFF]/10 text-white shadow-[0_0_20px_rgba(0,255,255,0.1)] scale-[1.02]' 
+                          : 'border-white/5 bg-white/5 text-[#888] active:bg-white/10 active:scale-95'
+                      }`}
+                    >
+                      <span className="font-mono text-[10px] tracking-[0.2em] opacity-40">
+                        0{idx + 1}
+                      </span>
+                      <span className={`font-mono text-xs sm:text-sm uppercase tracking-widest ${isActive ? 'text-[#00FFFF] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : ''}`}>
+                        {item.name.replace(/^[0-9]+ \/\/ /, '')}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
