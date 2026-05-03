@@ -199,7 +199,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-8">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-8">
       <div className="relative w-full max-w-7xl flex flex-col justify-center h-full pt-24 md:pt-32">
         <div className="max-w-5xl">
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-black font-heading tracking-tighter uppercase leading-[0.85] mb-6 md:mb-10 break-words flex flex-wrap">
@@ -486,7 +486,7 @@ const TechStackSection = () => {
   ];
 
   return (
-    <section id="tech" className="relative py-24 md:py-40 bg-transparent overflow-hidden flex items-center min-h-[100dvh] z-10">
+    <section id="tech" className="relative py-24 md:py-40 bg-transparent overflow-hidden flex items-center min-h-screen z-10">
       <div className="container mx-auto px-4 md:px-8 relative z-10 w-full max-w-7xl">
         <div className="flex flex-col gap-10 md:gap-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -668,7 +668,7 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
   };
 
   return (
-    <div className="w-screen h-[100dvh] flex items-center justify-center p-4 md:p-6 shrink-0 relative" style={{ perspective: 1200 }}>
+    <div className="w-screen h-screen flex items-center justify-center p-4 md:p-6 shrink-0 relative" style={{ perspective: 1200 }}>
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -811,7 +811,7 @@ const ProjectsSection = () => {
   return (
     <section id="projects" ref={targetRef} className="relative h-[400vh] bg-transparent z-10">
       {/* Sticky container matching screen height */}
-      <div className="sticky top-0 h-[100dvh] flex flex-col justify-center overflow-hidden w-full">
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden w-full">
         
         {/* Floating title above the timeline */}
         <div className="absolute top-12 md:top-20 left-6 md:left-12 z-50 pointer-events-none flex items-center gap-4">
@@ -853,7 +853,7 @@ const ContactsSection = () => {
   ];
 
   return (
-    <section id="contacts" className="py-24 md:py-40 bg-transparent min-h-[100dvh] flex items-center relative z-10 w-full overflow-hidden">
+    <section id="contacts" className="py-24 md:py-40 bg-transparent min-h-screen flex items-center relative z-10 w-full overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
       <div className="container mx-auto px-4 md:px-8 w-full max-w-7xl relative z-20">
@@ -1122,7 +1122,7 @@ export default function App() {
 
   return (
     // Solved X-axis scroll jumps without breaking top/sticky logic
-    <div className="bg-[#050505] min-h-[100dvh] text-white selection:bg-[#007BFF] selection:text-white scroll-smooth w-full relative overflow-clip">
+    <div className="bg-[#050505] min-h-screen text-white selection:bg-[#007BFF] selection:text-white scroll-smooth w-full relative overflow-clip">
       
       {/* Mobile Top Gradient (Vignette) for Logo readability */}
       <div 
