@@ -22,9 +22,15 @@ export const NeuralCore: React.FC = () => {
 
     // Canvas sizing
     const resize = () => {
+      const oldWidth = canvas.width;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      init(); // Reinitialize on resize to distribute particles
+      
+      // On mobile, height changes constantly due to address bar hiding/showing on scroll.
+      // We only want to fully reinitialize if it's a major resize (like orientation change).
+      if (particles.length === 0 || Math.abs(oldWidth - window.innerWidth) > 50) {
+        init(); 
+      }
     };
 
     class Particle {
@@ -52,9 +58,11 @@ export const NeuralCore: React.FC = () => {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Bounce off edges
-        if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
+        // Bounce off edges (with clamping to prevent getting stuck out of bounds)
+        if (this.x < 0) { this.x = 0; this.vx *= -1; }
+        if (this.x > canvas!.width) { this.x = canvas!.width; this.vx *= -1; }
+        if (this.y < 0) { this.y = 0; this.vy *= -1; }
+        if (this.y > canvas!.height) { this.y = canvas!.height; this.vy *= -1; }
 
         // Mouse repel loosely
         if (pointer.active) {
