@@ -907,9 +907,135 @@ const ContactsSection = () => {
   );
 };
 
+const MobileVerticalPulseMenu = ({ menuItems, activeSection, handleScrollTo }: any) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  // pulseValue: 100 means closed, 0 means open
+  const pulseValue = useSpring(100, { stiffness: 400, damping: 30 });
+
+  useEffect(() => {
+    pulseValue.set(isOpen ? 0 : 100);
+  }, [isOpen, pulseValue]);
+
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const onDrag = (e: any, info: any) => {
+    const base = isOpen ? 0 : 100;
+    let newX = base + (info.offset.x / 1.5);
+    pulseValue.set(Math.max(0, Math.min(100, newX)));
+  };
+
+  const onDragEnd = (e: any, info: any) => {
+    setIsDragging(false);
+    if (!isOpen && (info.offset.x < -30 || info.velocity.x < -100)) {
+      setIsOpen(true);
+    } else if (isOpen && (info.offset.x > 30 || info.velocity.x > 100)) {
+      setIsOpen(false);
+    } else {
+      pulseValue.set(isOpen ? 0 : 100);
+    }
+  };
+
+  const pathData = useTransform(pulseValue, cx => `M 100,0 Q ${cx},50 100,100`);
+  
+  const bgOpacity = useTransform(pulseValue, cx => (100 - cx) / 100 * 0.8);
+  const itemsOpacity = useTransform(pulseValue, cx => 1 - cx / 100);
+
+  return (
+    <>
+      <motion.div 
+        className="md:hidden fixed inset-0 z-[10900] bg-[#050505] pointer-events-none"
+        style={{ opacity: bgOpacity, pointerEvents: isOpen ? 'auto' : 'none' }}
+        onClick={() => setIsOpen(false)}
+      />
+
+      <motion.div 
+        className={`md:hidden fixed right-0 top-0 bottom-0 z-[11000] touch-none ${isOpen ? 'w-full' : 'w-12'}`}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0}
+        onDragStart={onDragStart}
+        onDrag={onDrag}
+        onDragEnd={onDragEnd}
+        style={{ touchAction: 'pan-y' }}
+        onClick={() => {
+          if (!isOpen) setIsOpen(true);
+          else setIsOpen(false);
+        }}
+      >
+        <div className="absolute right-0 top-0 w-32 h-full pointer-events-none">
+          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <motion.path 
+              d={pathData} 
+              fill="none" 
+              stroke="#00FFFF" 
+              vectorEffect="non-scaling-stroke"
+              style={{ filter: 'drop-shadow(0 0 6px rgba(0,255,255,0.6))' }}
+              animate={{ 
+                opacity: [0.4, 0.9, 0.4],
+                strokeWidth: [2, 4, 2]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </svg>
+        </div>
+
+        {/* Tension Chevron < */}
+        <AnimatePresence>
+          {!isOpen && !isDragging && (
+            <motion.div
+              initial={{ opacity: 0, x: 0 }}
+              animate={{ 
+                opacity: [0.3, 1, 0.3],
+                x: [0, -4, 0]
+              }}
+              exit={{ opacity: 0, x: 0, transition: { duration: 0.2 } }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[#00FFFF] text-sm font-bold pointer-events-none drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]"
+            >
+              &lt;
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="absolute right-0 top-0 bottom-0 w-48 flex flex-col justify-center h-[60vh] md:h-[70vh] my-auto pointer-events-none">
+          {menuItems.map((item: any, idx: number) => {
+            const isActive = activeSection === item.id;
+            const itemX = useTransform(pulseValue, cx => cx * 1.5); 
+
+            return (
+              <motion.button
+                key={item.id}
+                onClick={(e) => { 
+                  e.stopPropagation();
+                  handleScrollTo(item.id); 
+                  setIsOpen(false); 
+                }}
+                className="pointer-events-auto flex-1 flex flex-col items-end justify-center pr-10 outline-none"
+                style={{ x: itemX, opacity: itemsOpacity }}
+              >
+                <div className="flex flex-col items-end group">
+                  <span className={`font-mono text-sm uppercase tracking-[0.2em] transition-colors ${isActive ? 'text-[#00FFFF] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-[#888]'}`}>
+                    {item.shortName}
+                  </span>
+                  <span className={`font-mono text-[10px] mt-1 ${isActive ? 'text-[#00FFFF]' : 'text-[#444]'}`}>
+                    0{idx + 1}
+                  </span>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.div>
+    </>
+  );
+};
+
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { name: "01 // Главная", shortName: "Главная", id: "hero" },
@@ -925,7 +1051,6 @@ export default function App() {
   const handleScrollTo = (id: string) => {
     setActiveSection(id);
     setIsScrollingTo(true);
-    setIsMobileMenuOpen(false);
     document.body.style.overflow = '';
     scrollToElement(id);
     setTimeout(() => setIsScrollingTo(false), 1500);
@@ -994,15 +1119,6 @@ export default function App() {
   useEffect(() => {
     (window as any).isScrollingToFlag = isScrollingTo;
   }, [isScrollingTo]);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [isMobileMenuOpen]);
 
   return (
     // Solved X-axis scroll jumps without breaking top/sticky logic
@@ -1081,62 +1197,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Mobile Floating Action Button */}
-      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[11500]">
-        <button 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="bg-[#111]/80 backdrop-blur-2xl border border-white/10 rounded-full px-5 py-3.5 flex items-center gap-3 shadow-[0_4px_30px_rgba(0,0,0,0.8)] active:scale-95 transition-transform"
-        >
-          <div className="relative w-4 h-3.5 flex flex-col justify-between">
-            <span className={`w-full h-[1.5px] bg-white transition-all transform duration-300 origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
-            <span className={`w-full h-[1.5px] bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'}`} />
-            <span className={`w-full h-[1.5px] bg-white transition-all transform duration-300 origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
-          </div>
-          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white">Menu</span>
-        </button>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: "100%" }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="md:hidden fixed inset-0 z-[11000] bg-[#050505]/80 backdrop-blur-2xl flex flex-col justify-end"
-          >
-            <div className="p-4 pb-28 w-full bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent">
-              <div className="flex flex-col gap-2 relative">
-                {/* Accent glow behind menu items */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#007BFF]/10 blur-[80px] pointer-events-none rounded-full" />
-                
-                {menuItems.map((item, idx) => {
-                  const isActive = activeSection === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleScrollTo(item.id)}
-                      className={`relative flex items-center justify-between px-6 py-4 rounded-2xl border transition-all duration-300 ${
-                        isActive 
-                          ? 'border-[#00FFFF]/30 bg-[#00FFFF]/10 text-white shadow-[0_0_20px_rgba(0,255,255,0.1)] scale-[1.02]' 
-                          : 'border-white/5 bg-white/5 text-[#888] active:bg-white/10 active:scale-95'
-                      }`}
-                    >
-                      <span className="font-mono text-[10px] tracking-[0.2em] opacity-40">
-                        0{idx + 1}
-                      </span>
-                      <span className={`font-mono text-xs sm:text-sm uppercase tracking-widest ${isActive ? 'text-[#00FFFF] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : ''}`}>
-                        {item.name.replace(/^[0-9]+ \/\/ /, '')}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Vertical Pulse Navigation */}
+      <MobileVerticalPulseMenu menuItems={menuItems} activeSection={activeSection} handleScrollTo={handleScrollTo} />
 
       {/* Global Background (NeuralCore + Vignette) - Shown on layers 1, 4, 5, 6 */}
       <div className="fixed inset-0 z-0 pointer-events-none">
