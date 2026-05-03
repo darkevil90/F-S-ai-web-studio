@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePres
 import Lenis from 'lenis';
 import { Monitor, Cpu, Server, ChevronRight } from 'lucide-react';
 import { NeuralCore } from './components/NeuralCore';
+import { TerminalDepths } from './TerminalDepths';
+import { CustomCursor } from './components/CustomCursor';
 
 export const scrollToElement = (id: string) => {
   const element = document.getElementById(id);
@@ -278,54 +280,110 @@ const HeroSection = () => {
 };
 
 // 2. Блок: About (О студии) - Scroll Reveal Concept
-const ScrollWord: React.FC<{ word: string, progress: any, start: number, end: number }> = ({ word, progress, start, end }) => {
-  const opacity = useTransform(progress, [start, end], [0.15, 1]);
-  const filter = useTransform(progress, [start, end], ["blur(12px)", "blur(0px)"]);
+const ScrambleText: React.FC<{ word: string, progress: any, start: number, end: number }> = ({ word, progress, start, end }) => {
+  const letters = word.split("");
   
-  const highlightWords = ["F&S", "Studio", "экосистемы,", "иммерсивные", "архитектуры.", "цифровые", "инженерный"];
-  const color = highlightWords.includes(word) ? "#007BFF" : "#FFFFFF";
-
   return (
-    <motion.span style={{ opacity, filter, color }} className="inline-block hover:text-[#00FFFF] hover:drop-shadow-[0_0_15px_rgba(0,255,255,0.5)] transition-all duration-300">
-      {word}&nbsp;
-    </motion.span>
+    <span className="inline-block whitespace-nowrap overflow-visible">
+      {letters.map((letter, i) => {
+        const letterStart = start + (i * ((end - start) / letters.length));
+        const letterEnd = letterStart + ((end - start) / 2);
+        
+        const opacity = useTransform(progress, [letterStart, letterEnd], [0.05, 1]);
+        const y = useTransform(progress, [letterStart, letterEnd], [20, 0]);
+        const rotateX = useTransform(progress, [letterStart, letterEnd], [90, 0]);
+        const filter = useTransform(progress, [letterStart, letterEnd], ["blur(12px)", "blur(0px)"]);
+        
+        const isHighlight = ["F&S", "Studio", "экосистемы,", "иммерсивные", "архитектуры.", "цифровые", "инженерный"].includes(word);
+        const baseColor = isHighlight ? "#007BFF" : "#FFFFFF";
+        const color = useTransform(progress, [letterStart, letterEnd], ["#00FFFF", baseColor]);
+
+        return (
+          <motion.span 
+            key={i}
+            style={{ opacity, y, rotateX, filter, color, display: 'inline-block', transformPerspective: 800, transformOrigin: 'top' }}
+            className={`hover:text-[#00FFFF] hover:-translate-y-1 hover:drop-shadow-[0_0_15px_rgba(0,255,255,0.8)] transition-all duration-300 cursor-default`}
+          >
+            {letter}
+          </motion.span>
+        );
+      })}
+      &nbsp;
+    </span>
   );
 };
 
 const AboutSection = () => {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 50%"] });
-
-  // Вариант 1 (Техно-эстетика):
-  const text = "F&S Studio — инженерный подход к эстетике. Мы разрабатываем цифровые экосистемы, которые захватывают внимание с первых секунд. Наша специализация — иммерсивные интерфейсы, генеративный дизайн и сложные веб архитектуры.";
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 45%"] });
   
+  const progStr = useTransform(scrollYProgress, v => (v * 100).toFixed(1) + "%");
+
+  const text = "F&S Studio — инженерный подход к эстетике. Мы разрабатываем цифровые экосистемы, которые захватывают внимание с первых секунд. Наша специализация — иммерсивные интерфейсы, генеративный дизайн и сложные веб архитектуры.";
   const words = text.split(" ");
+  
+  const bgScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.1]);
+  const bgRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
 
   return (
-    <section id="about" ref={ref} className="relative min-h-[150vh] bg-[#050505] z-20 py-20 md:py-32 px-4 md:px-8 flex items-start justify-center" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
-      {/* Subtle Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,123,255,0.04)_0%,transparent_60%)] pointer-events-none" />
+    <section id="about" ref={ref} className="relative min-h-[150vh] md:min-h-[200vh] bg-[#050505] z-20 py-20 px-4 md:px-8 flex items-start justify-center overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
       
-      <div className="sticky top-1/4 max-w-6xl mx-auto flex flex-col gap-10 w-full mt-[10vh]">
-        <div className="flex items-center gap-4 text-[#007BFF] font-mono text-xs sm:text-sm uppercase tracking-[0.2em] opacity-80">
-          <span className="w-8 sm:w-16 h-[1px] bg-[#007BFF]"></span>
-          [ О студии ]
+      {/* Dynamic Background Text Elements */}
+      <motion.div 
+        style={{ scale: bgScale, rotate: bgRotate, opacity: 0.05 }} 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      >
+        <div className="font-heading text-[25vw] md:text-[20vw] font-black text-transparent leading-none text-center mix-blend-screen"
+             style={{ WebkitTextStroke: '2px #007BFF' }}>
+          CORE<br/>SYS
+        </div>
+      </motion.div>
+
+      {/* Cybernetic grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,123,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,123,255,0.04)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#050505_80%)] pointer-events-none" />
+
+      <div className="sticky top-[15vh] max-w-6xl mx-auto flex flex-col gap-8 md:gap-16 w-full z-10">
+        
+        {/* Top Tech Header */}
+        <div className="flex items-end justify-between font-mono text-xs sm:text-sm uppercase tracking-[0.2em] border-b border-[#007BFF]/20 pb-4">
+          <div className="flex items-center gap-4 text-[#007BFF] opacity-80">
+            <motion.div 
+              animate={{ opacity: [1, 0.2, 1] }} 
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-2 h-2 bg-[#00FFFF] shadow-[0_0_10px_#00FFFF]" 
+            />
+            [ О студии ]
+          </div>
+          <div className="flex flex-col items-end opacity-60 text-[#00FFFF] tabular-nums font-mono">
+             <motion.span>{progStr}</motion.span>
+             <span className="text-[10px] text-[#007BFF]">SCROLL_SYNC</span>
+          </div>
         </div>
         
-        <div className="flex flex-wrap text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-inter font-light leading-[1.2] tracking-tight">
-          {words.map((word, i) => {
-            const start = i / words.length;
-            const end = start + (1 / words.length);
-            return (
-              <ScrollWord 
-                key={i} 
-                word={word} 
-                progress={scrollYProgress} 
-                start={start} 
-                end={end} 
-              />
-            );
-          })}
+        {/* Decorative corner markers */}
+        <div className="relative p-6 md:p-10">
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#007BFF]/40" />
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#007BFF]/40" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#007BFF]/40" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#007BFF]/40" />
+          
+          {/* Main Text Content */}
+          <div className="flex flex-wrap text-2xl sm:text-3xl md:text-5xl lg:text-5xl xl:text-6xl font-inter font-light leading-[1.3] tracking-tight relative z-10" style={{ perspective: "1000px" }}>
+            {words.map((word, i) => {
+              const start = i / words.length;
+              const end = Math.min(1, start + (1.5 / words.length));
+              return (
+                <ScrambleText 
+                  key={i} 
+                  word={word} 
+                  progress={scrollYProgress} 
+                  start={start} 
+                  end={end} 
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
@@ -639,36 +697,51 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
   });
 
   // Mouse Interaction Values
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
+  const absMouseX = useMotionValue(0);
+  const absMouseY = useMotionValue(0);
+  const relMouseX = useMotionValue(0);
+  const relMouseY = useMotionValue(0);
   
-  const smoothMouseX = useSpring(mouseX, { damping: 30, stiffness: 200 });
-  const smoothMouseY = useSpring(mouseY, { damping: 30, stiffness: 200 });
+  const smoothRelX = useSpring(relMouseX, { damping: 20, stiffness: 200, mass: 0.5 });
+  const smoothRelY = useSpring(relMouseY, { damping: 20, stiffness: 200, mass: 0.5 });
 
-  // Spotlight transform
-  const spotlightTop = useTransform(smoothMouseY, [0, 1], ["0%", "100%"]);
-  const spotlightLeft = useTransform(smoothMouseX, [0, 1], ["0%", "100%"]);
+  const smoothAbsX = useSpring(absMouseX, { damping: 30, stiffness: 200 });
+  const smoothAbsY = useSpring(absMouseY, { damping: 30, stiffness: 200 });
 
-  // Tilt transform (subtle)
-  const tiltX = useTransform(smoothMouseY, [0, 1], [8, -8]);
-  const tiltY = useTransform(smoothMouseX, [0, 1], [-8, 8]);
+  // Tilt transform (more dynamic)
+  const tiltX = useTransform(smoothRelY, [-1, 1], [15, -15]);
+  const tiltY = useTransform(smoothRelX, [-1, 1], [-15, 15]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    mouseX.set(x);
-    mouseY.set(y);
+    
+    // Absolute position within card
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    absMouseX.set(x);
+    absMouseY.set(y);
+
+    // Relative position (-1 to 1) for tilt
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    relMouseX.set((x - centerX) / centerX);
+    relMouseY.set((y - centerY) / centerY);
   };
 
   const handleMouseLeave = () => {
-    mouseX.set(0.5);
-    mouseY.set(0.5);
+    relMouseX.set(0);
+    relMouseY.set(0);
   };
 
+  // Cyan Edge Glow
+  const borderBackground = useTransform(
+    [absMouseX, absMouseY],
+    ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(0, 255, 255, 0.4), transparent 40%)`
+  );
+
   return (
-    <div className="w-screen h-screen flex items-center justify-center p-4 md:p-6 shrink-0 relative" style={{ perspective: 1200 }}>
+    <div className="w-screen h-screen flex items-center justify-center p-4 md:p-6 shrink-0 relative" style={{ perspective: 1500 }}>
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -683,82 +756,77 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
           opacity, 
           transformStyle: "preserve-3d" 
         }}
-        className={`relative w-full max-w-6xl h-[70vh] md:h-[65vh] rounded-[2.5rem] border border-white/10 flex flex-col justify-between overflow-hidden group cursor-none ${proj.bgClass}`}
+        className="relative w-full max-w-6xl h-[70vh] md:h-[65vh] rounded-[2.5rem] cursor-pointer group"
       >
-        {/* Interaction layer: Spotlight */}
-        <motion.div 
-          className="absolute w-[800px] h-[800px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"
+        <motion.div
+          className="relative w-full h-full rounded-[2.5rem] flex flex-col justify-between overflow-hidden"
           style={{
-            top: spotlightTop,
-            left: spotlightLeft,
-            x: "-50%",
-            y: "-50%",
-            background: `radial-gradient(circle, ${proj.accentColor.replace('0.2', '0.4').replace('0.1', '0.2')} 0%, transparent 70%)`,
-            filter: "blur(80px)",
+             rotateX: tiltX,
+             rotateY: tiltY,
+             transformStyle: "preserve-3d",
           }}
-        />
-
-        {/* Global Accent Glow */}
-        <div 
-          className="absolute inset-0 opacity-20 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity duration-1000" 
-          style={{ background: `radial-gradient(circle at 100% 0%, ${proj.accentColor} 0%, transparent 50%)` }}
-        />
-        
-        {proj.isFuture && <div className="absolute inset-0 bg-[#007BFF]/10 blur-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity" />}
-
-        {/* Inner Content Wrapper for Tilt */}
-        <motion.div 
-          style={{ 
-            rotateX: tiltX, 
-            rotateY: tiltY,
-            transformStyle: "preserve-3d",
-            height: "100%",
-            width: "100%"
-          }}
-          className="relative flex flex-col justify-between z-30"
         >
-          <div className="p-8 md:p-16 flex justify-between items-start">
-            <div style={{ transform: "translateZ(100px)" }}>
-              <h3 className="font-heading text-3xl md:text-5xl lg:text-7xl uppercase font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] leading-tight">
-                {proj.title}
-              </h3>
-              <p className="mt-4 font-mono text-[#888] text-xs md:text-lg lg:text-2xl uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors duration-500">
-                {proj.description}
-              </p>
-            </div>
-          </div>
-          
-          <div className="p-8 md:p-16 flex items-end justify-between">
-            <div style={{ transform: "translateZ(80px)" }} className="flex flex-col gap-2">
-              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#444] group-hover:text-[#888] transition-colors">Experience / 0{index + 1}</span>
-              {proj.isFuture ? (
-                <a href={proj.link} target="_blank" rel="noreferrer" className="flex items-center gap-4 group/btn">
-                  <span className="font-mono text-[#007BFF] text-xl md:text-2xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#007BFF] to-blue-300">
-                    Начать проект
-                  </span>
-                  <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-[#007BFF] flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-500">
-                    <ChevronRight className="w-5 h-5 md:w-10 md:h-10 text-white" />
-                  </div>
-                </a>
-              ) : (
-                <a href={`https://${proj.domain}`} target="_blank" rel="noreferrer" className="font-mono text-white/50 hover:text-white transition-all text-xl md:text-2xl lg:text-5xl group-hover:tracking-wider transition-all duration-700">
-                  {proj.domain}
-                </a>
-              )}
-            </div>
+          {/* Edge Glow Filter Layer */}
+          <motion.div 
+             className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[2.5rem]"
+             style={{ background: borderBackground }}
+          />
 
-            {/* Custom Interactive Cursor inside card (only on hover) */}
-            <motion.div
-              style={{
-                top: spotlightTop,
-                left: spotlightLeft,
-                x: "-50%",
-                y: "-50%",
-              }}
-              className="absolute w-16 h-16 rounded-full border border-[#007BFF]/30 backdrop-blur-md pointer-events-none z-50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 transform-gpu"
-            >
-              <div className="w-1.5 h-1.5 bg-[#007BFF] rounded-full shadow-[0_0_15px_#007BFF]" />
-            </motion.div>
+          {/* Actual Card Background (slightly inset so glow shows on edge) */}
+          <div className={`absolute inset-[2px] rounded-[calc(2.5rem-2px)] z-[1]`} />
+          <div className={`absolute inset-[2px] bg-[#0A0A0A]/90 backdrop-blur-3xl rounded-[calc(2.5rem-2px)] z-[2] ${proj.bgClass}`} />
+
+          {/* Spotlight layer */}
+          <motion.div 
+            className="absolute z-[3] w-[800px] h-[800px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              x: useTransform(smoothAbsX, x => x - 400),
+              y: useTransform(smoothAbsY, y => y - 400),
+              background: `radial-gradient(circle, ${proj.accentColor.replace('0.2', '0.4').replace('0.1', '0.2')} 0%, transparent 70%)`,
+              filter: "blur(80px)",
+            }}
+          />
+
+          {/* Global Accent Glow */}
+          <div 
+            className="absolute inset-[2px] opacity-20 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity duration-1000 z-[3]" 
+            style={{ background: `radial-gradient(circle at 100% 0%, ${proj.accentColor} 0%, transparent 50%)` }}
+          />
+          
+          {proj.isFuture && <div className="absolute inset-[2px] bg-[#007BFF]/10 blur-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity z-[3]" />}
+
+          {/* Inner Content Wrapper for Tilt */}
+          <div className="relative flex flex-col justify-between z-[10] w-full h-full p-8 md:p-16" style={{ transform: "translateZ(80px)" }}>
+            <div className="flex justify-between items-start">
+              <div style={{ transform: "translateZ(100px)" }}>
+                <h3 className="font-heading text-3xl md:text-5xl lg:text-7xl uppercase font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] leading-tight">
+                  {proj.title}
+                </h3>
+                <p className="mt-4 font-mono text-[#888] text-xs md:text-lg lg:text-2xl uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors duration-500">
+                  {proj.description}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-end justify-between">
+              <div style={{ transform: "translateZ(80px)" }} className="flex flex-col gap-2">
+                <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#444] group-hover:text-cyan-400/50 transition-colors">Experience / 0{index + 1}</span>
+                {proj.isFuture ? (
+                  <a href={proj.link} target="_blank" rel="noreferrer" className="flex items-center gap-4 group/btn">
+                    <span className="font-mono text-cyan-400 text-xl md:text-2xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-300">
+                      Начать проект
+                    </span>
+                    <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-cyan-400/20 border border-cyan-400 flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-500">
+                      <ChevronRight className="w-5 h-5 md:w-10 md:h-10 text-cyan-400" />
+                    </div>
+                  </a>
+                ) : (
+                  <a href={`https://${proj.domain}`} target="_blank" rel="noreferrer" className="font-mono text-white/50 hover:text-cyan-400 transition-all text-xl md:text-2xl lg:text-5xl group-hover:tracking-wider duration-700">
+                    {proj.domain}
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </motion.div>
       </motion.div>
@@ -1124,6 +1192,8 @@ export default function App() {
     // Solved X-axis scroll jumps without breaking top/sticky logic
     <div className="bg-[#050505] min-h-screen text-white selection:bg-[#007BFF] selection:text-white scroll-smooth w-full relative overflow-clip">
       
+      <CustomCursor />
+      
       {/* Mobile Top Gradient (Vignette) for Logo readability */}
       <div 
         className="md:hidden fixed top-0 left-0 w-full h-40 z-[10900] pointer-events-none bg-gradient-to-b from-[#050505]/90 via-[#050505]/50 to-transparent"
@@ -1208,26 +1278,7 @@ export default function App() {
 
       <HeroSection />
       
-      {/* Global pseudo-Z-axis depth modifier for entry */}
-      <motion.div
-        initial={{ scale: 0.95, filter: "blur(20px)" }}
-        whileInView={{ scale: 1, filter: "blur(0px)" }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-      >
-        <AboutSection />
-      </motion.div>
-      
-      <ManifestoSection />
-      
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
-        <TechStackSection />
-      </motion.div>
+      <TerminalDepths />
 
       <ProjectsSection />
       <ContactsSection />
