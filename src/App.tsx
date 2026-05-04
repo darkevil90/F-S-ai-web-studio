@@ -6,6 +6,9 @@ import { NeuralCore } from './components/NeuralCore';
 import { TerminalDepths } from './TerminalDepths';
 import { CustomCursor } from './components/CustomCursor';
 
+import { NeuralText } from './components/NeuralText';
+import { HoloCard } from './components/HoloCard';
+
 export const scrollToElement = (id: string) => {
   const element = document.getElementById(id);
   if (element) {
@@ -202,9 +205,10 @@ const HeroSection = () => {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-8">
-      <div className="relative w-full max-w-7xl flex flex-col justify-center h-full pt-24 md:pt-32">
+      
+      <div className="relative w-full max-w-7xl flex flex-col justify-center h-full pt-24 md:pt-32 z-10">
         <div className="max-w-5xl">
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-black font-heading tracking-tighter uppercase leading-[0.85] mb-6 md:mb-10 break-words flex flex-wrap">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[7.5rem] font-black font-heading tracking-tighter uppercase leading-[0.8] mb-6 md:mb-10 break-words flex flex-wrap">
             <span className="inline-block overflow-visible relative mr-2 sm:mr-4 mb-1 sm:mb-2 md:mb-4">
               <motion.span
                 initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
@@ -212,7 +216,7 @@ const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0, ease: "easeOut" }}
                 className="inline-block text-white relative z-10"
               >
-                Пространство
+                <NeuralText>Пространство</NeuralText>
               </motion.span>
             </span>
             <span className="inline-block overflow-visible relative mr-2 sm:mr-4 mb-1 sm:mb-2 md:mb-4">
@@ -222,21 +226,19 @@ const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                 className="inline-block relative"
               >
-                {/* Glow layer for soft pulsing */}
                 <motion.span
-                  animate={{ opacity: [0.3, 0.8, 0.3], scale: [0.95, 1.05, 0.95] }}
+                  animate={{ 
+                    opacity: [1, 0.15, 1],
+                    textShadow: [
+                      "0 0 20px rgba(0, 255, 255, 0.6)",
+                      "0 0 0px rgba(0, 255, 255, 0)",
+                      "0 0 20px rgba(0, 255, 255, 0.6)"
+                    ]
+                  }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#007BFF] blur-xl z-0"
-                  aria-hidden="true"
+                  className="inline-block relative z-10 text-cyan-400"
                 >
-                  будущего
-                </motion.span>
-                <motion.span
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="inline-block relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#007BFF]"
-                >
-                  будущего
+                  <NeuralText active={true}>будущего</NeuralText>
                 </motion.span>
               </motion.span>
             </span>
@@ -246,7 +248,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, filter: "blur(10px)", x: -20 }}
             animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="text-[#888888] font-inter text-base sm:text-lg md:text-2xl lg:text-3xl max-w-3xl leading-snug lg:leading-tight mb-12 border-l-[3px] border-[#007BFF] pl-5 md:pl-8"
+            className="text-[#888888] font-inter text-sm sm:text-lg md:text-2xl lg:text-3xl max-w-3xl leading-snug lg:leading-tight mb-12 border-l-[3px] border-[#007BFF] pl-5 md:pl-8"
           >
             Дизайн-инженерия нового поколения: где каждый пиксель обоснован алгоритмом, а каждый алгоритм — искусством.
           </motion.p>
@@ -326,7 +328,7 @@ const AboutSection = () => {
   const bgRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
 
   return (
-    <section id="about" ref={ref} className="relative min-h-[150vh] md:min-h-[200vh] bg-[#050505] z-20 py-20 px-4 md:px-8 flex items-start justify-center overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
+    <section id="about" ref={ref} className="relative min-h-[150vh] md:min-h-[200vh] bg-[#050505] z-20 py-20 px-4 md:px-8 flex items-start justify-center overflow-hidden">
       
       {/* Dynamic Background Text Elements */}
       <motion.div 
@@ -341,7 +343,6 @@ const AboutSection = () => {
 
       {/* Cybernetic grid overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,123,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,123,255,0.04)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#050505_80%)] pointer-events-none" />
 
       <div className="sticky top-[15vh] max-w-6xl mx-auto flex flex-col gap-8 md:gap-16 w-full z-10">
         
@@ -424,10 +425,10 @@ const ManifestoCard: React.FC<{ item: any; isEven: boolean }> = ({ item, isEven 
       />
 
       {/* Content */}
-      <div className={`w-full pl-12 md:pl-0 md:w-1/2 ${isEven ? 'md:pr-20 text-left md:text-right' : 'md:pl-20 text-left'}`}>
+      <div className={`w-full pl-10 sm:pl-12 md:pl-0 md:w-1/2 ${isEven ? 'md:pr-20 text-left md:text-right' : 'md:pl-20 text-left'}`}>
         <motion.div
            style={{ opacity, scale, borderColor }}
-           className="bg-[#050505]/50 backdrop-blur-xl border transition-colors duration-300 rounded-[2rem] p-8 md:p-12 relative group overflow-hidden"
+           className="bg-[#050505]/50 backdrop-blur-xl border transition-colors duration-300 rounded-[2rem] p-6 sm:p-10 md:p-12 relative group overflow-hidden"
         >
            <motion.div style={{ opacity: glow }} className="absolute inset-0 bg-gradient-to-b from-[#007BFF]/10 to-transparent pointer-events-none blur-3xl" />
            <motion.div style={{ backgroundColor: bgGlow }} className="absolute inset-0 pointer-events-none transition-colors" />
@@ -478,10 +479,10 @@ const ManifestoSection = () => {
   ];
 
   return (
-    <section id="manifesto" ref={ref} className="relative py-24 md:py-48 bg-[#050505] z-20 px-4 md:px-8 overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)' }}>
+    <section id="manifesto" ref={ref} className="relative py-24 md:py-48 bg-[#050505] z-20 px-4 md:px-8 overflow-hidden">
        <div className="max-w-6xl mx-auto relative cursor-default">
-          <div className="text-center mb-20 md:mb-32 flex flex-col items-center">
-             <h2 className="text-4xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-heading font-black text-white uppercase tracking-tighter drop-shadow-[0_0_30px_rgba(0,123,255,0.2)] leading-none">
+          <div className="text-center mb-16 md:mb-32 flex flex-col items-center">
+             <h2 className="text-3xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-heading font-black text-white uppercase tracking-tighter drop-shadow-[0_0_30px_rgba(0,123,255,0.2)] leading-none">
                Манифест
              </h2>
           </div>
@@ -554,33 +555,31 @@ const TechStackSection = () => {
               viewport={{ once: true }}
               className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[7rem] uppercase text-white font-black leading-none tracking-tighter drop-shadow-[0_0_20px_rgba(0,123,255,0.15)]"
             >
-              Стек
+              <NeuralText>Стек</NeuralText>
             </motion.h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
             {cards.map((card, idx) => (
               <div key={idx} onClick={() => setSelectedTech(idx)} className="cursor-pointer group h-full">
-                <TiltCard className="h-full">
-                  <div className="flex flex-col p-8 md:p-12 h-full min-h-[400px] md:min-h-[500px] rounded-[2rem] bg-white/[0.015] border border-white/5 backdrop-blur-3xl shadow-[0_4px_30px_rgba(0,0,0,0.2)] hover:border-[#007BFF]/40 transition-all duration-500 relative overflow-hidden group-hover:bg-[#007BFF]/[0.02]">
-                    
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#007BFF]/0 via-transparent to-[#007BFF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <HoloCard className="h-full">
+                  <div className="flex flex-col p-8 md:p-12 h-full min-h-[400px] md:min-h-[500px] relative overflow-hidden">
                     
                     <div className="flex justify-between items-start mb-10 relative z-10">
-                      <div className="p-4 bg-black/40 border border-[#007BFF]/20 rounded-2xl group-hover:bg-[#007BFF]/20 group-hover:border-[#007BFF]/50 transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_20px_rgba(0,123,255,0.3)]">
+                      <div className="p-4 bg-black/40 border border-cyan-400/20 rounded-2xl group-hover:bg-cyan-400/20 group-hover:border-cyan-400/50 transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]">
                         {card.icon}
                       </div>
-                      <span className="font-mono text-xs sm:text-sm uppercase tracking-widest text-[#444] group-hover:text-[#007BFF] transition-colors">0{idx + 1}</span>
+                      <span className="font-mono text-xs sm:text-sm uppercase tracking-widest text-[#444] group-hover:text-cyan-400 transition-colors">0{idx + 1}</span>
                     </div>
 
-                    <h4 className="font-heading text-2xl md:text-3xl lg:text-4xl text-white uppercase tracking-tighter font-bold relative z-10 mb-6 leading-none">
+                    <h4 className="font-heading text-2xl md:text-3xl lg:text-4xl text-white uppercase tracking-tighter font-bold relative z-10 mb-6 leading-none group-hover:text-cyan-400 transition-colors">
                       {card.category}
                     </h4>
                     
                     <div className="flex flex-col gap-4 relative z-10 flex-grow">
                       {card.items.slice(0, 4).map((item, i) => (
                         <div key={i} className="flex items-center gap-3">
-                          <div className="w-1 h-1 bg-[#007BFF] rounded-full opacity-30 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#007BFF] transition-all" />
+                          <div className="w-1 h-1 bg-cyan-400 rounded-full opacity-30 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00FFFF] transition-all" />
                           <span className="font-inter font-light text-base md:text-lg text-[#777] group-hover:text-white transition-colors duration-300">
                             {item}
                           </span>
@@ -589,11 +588,11 @@ const TechStackSection = () => {
                     </div>
 
                     <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
-                      <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-[#666] group-hover:text-[#00FFFF] transition-colors">Подробности</span>
-                      <ChevronRight className="w-5 h-5 text-[#444] group-hover:text-[#00FFFF] group-hover:translate-x-2 transition-all" />
+                      <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-[#666] group-hover:text-cyan-400 transition-colors">Подробности</span>
+                      <ChevronRight className="w-5 h-5 text-[#444] group-hover:text-cyan-400 group-hover:translate-x-2 transition-all" />
                     </div>
                   </div>
-                </TiltCard>
+                </HoloCard>
               </div>
             ))}
           </div>
@@ -773,8 +772,9 @@ const ProjectCard = ({ proj, index, progress }: { proj: any, index: number, prog
           />
 
           {/* Actual Card Background (slightly inset so glow shows on edge) */}
-          <div className={`absolute inset-[2px] rounded-[calc(2.5rem-2px)] z-[1]`} />
-          <div className={`absolute inset-[2px] bg-[#0A0A0A]/90 backdrop-blur-3xl rounded-[calc(2.5rem-2px)] z-[2] ${proj.bgClass}`} />
+          <div className="absolute inset-0 rounded-[2.5rem] z-[1] overflow-hidden">
+            <div className={`absolute inset-[2px] bg-[#0A0A0A]/90 backdrop-blur-3xl rounded-[calc(2.5rem-2px)] z-[2] ${proj.bgClass}`} />
+          </div>
 
           {/* Spotlight layer */}
           <motion.div 
@@ -904,7 +904,7 @@ const ContactsSection = () => {
   const contacts = [
     {
       name: "Фаррух Адизов",
-      role: "Creative Technologist // Creative Developer",
+      role: "Creative Engineer",
       tg: "@Darkstoic",
       tgLink: "https://t.me/Darkstoic",
       phone: "+79998987849",
@@ -912,7 +912,7 @@ const ContactsSection = () => {
     },
     {
       name: "Сергей Олейников",
-      role: "Art Director (Motion)",
+      role: "Business Development",
       tg: "@sergei_oleinikov",
       tgLink: "https://t.me/sergei_oleinikov",
       phone: "+79020930167",
@@ -925,10 +925,9 @@ const ContactsSection = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
       <div className="container mx-auto px-4 md:px-8 w-full max-w-7xl relative z-20">
-        <div className="mb-16 md:mb-24">
-          <div className="font-mono text-[#007BFF] text-xs sm:text-sm uppercase tracking-[0.2em] mb-4 opacity-80">[ Команда «Единорогов» ]</div>
-          <h2 className="font-heading text-4xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-black uppercase text-white tracking-tighter leading-none">
-            Архитекторы
+        <div className="mb-16 md:mb-32">
+          <h2 className="font-heading text-3xl sm:text-5xl md:text-[5rem] lg:text-[7rem] font-black uppercase text-white tracking-tighter leading-none mb-12 md:mb-20">
+            <NeuralText>Архитекторы</NeuralText>
           </h2>
         </div>
 
@@ -940,7 +939,7 @@ const ContactsSection = () => {
             >
               <div className="absolute -left-4 md:-left-8 top-0 w-1 h-0 bg-[#007BFF] group-hover:h-full transition-all duration-500 ease-out" />
               
-              <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4 group-hover:text-[#00FFFF] transition-colors duration-300 transform-gpu">{c.name}</h3>
+              <h3 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4 group-hover:text-[#00FFFF] transition-colors duration-300 transform-gpu">{c.name}</h3>
               <p className="font-mono text-[#007BFF] uppercase tracking-[0.1em] text-sm md:text-base mb-12">{c.role}</p>
 
               <div className="space-y-6 md:space-y-8 font-mono text-base md:text-xl font-light">
@@ -1194,17 +1193,6 @@ export default function App() {
       
       <CustomCursor />
       
-      {/* Mobile Top Gradient (Vignette) for Logo readability */}
-      <div 
-        className="md:hidden fixed top-0 left-0 w-full h-40 z-[10900] pointer-events-none bg-gradient-to-b from-[#050505]/90 via-[#050505]/50 to-transparent"
-        style={{ 
-          backdropFilter: 'blur(8px)', 
-          WebkitBackdropFilter: 'blur(8px)',
-          maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', 
-          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' 
-        }}
-      />
-
       {/* Main Logo */}
       <div className="fixed top-4 md:top-6 left-4 md:left-6 z-[11500] cursor-pointer group" onClick={() => handleScrollTo('hero')}>
         <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
@@ -1270,10 +1258,9 @@ export default function App() {
       {/* Mobile Vertical Pulse Navigation */}
       <MobileVerticalPulseMenu menuItems={menuItems} activeSection={activeSection} handleScrollTo={handleScrollTo} />
 
-      {/* Global Background (NeuralCore + Vignette) - Shown on layers 1, 4, 5, 6 */}
+      {/* Global Background (NeuralCore) - Shown on layers 1, 4, 5, 6 */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <NeuralCore />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#050505_80%)]" />
       </div>
 
       <HeroSection />

@@ -8,6 +8,7 @@ interface HoloCardProps {
 }
 
 export const HoloCard: React.FC<HoloCardProps> = ({ children, className = '', onClick }) => {
+  const [isMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -23,8 +24,10 @@ export const HoloCard: React.FC<HoloCardProps> = ({ children, className = '', on
   const mouseY = useMotionValue(0);
 
   // Tilt transformation
-  const rotateX = useTransform(yRel, [-1, 1], [10, -10]);
-  const rotateY = useTransform(xRel, [-1, 1], [-10, 10]);
+  const tX = useTransform(yRel, [-1, 1], [10, -10]);
+  const tY = useTransform(xRel, [-1, 1], [-10, 10]);
+  const rotateX = isMobile ? 0 : tX;
+  const rotateY = isMobile ? 0 : tY;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -80,14 +83,16 @@ export const HoloCard: React.FC<HoloCardProps> = ({ children, className = '', on
            style={{ background: borderBackground }}
         />
 
-        {/* Inner Card Background (slightly smaller to show border glow) */}
-        <div className="absolute inset-[1px] bg-[#0A0A0A]/90 backdrop-blur-3xl rounded-[calc(2rem-1px)] z-[1]" />
+        {/* Inner Card Background (slightly overlap glow to hide sharp edges) */}
+        <div className="absolute inset-0 bg-[#0A0A0A]/95 backdrop-blur-xl md:backdrop-blur-3xl rounded-[2rem] z-[1]" />
         
-        {/* Glow highlight inside the card on hover */}
-        <motion.div 
-           className="absolute inset-[1px] z-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[calc(2rem-1px)] mix-blend-screen"
-           style={{ background: useTransform([mouseX, mouseY], ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(0, 123, 255, 0.1), transparent 50%)`) }}
-        />
+        {/* Glow highlight inside the card on hover (disabled on mobile for performance) */}
+        {!isMobile && (
+          <motion.div 
+             className="absolute inset-0 z-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[2rem] mix-blend-screen"
+             style={{ background: useTransform([mouseX, mouseY], ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(0, 123, 255, 0.08), transparent 60%)`) }}
+          />
+        )}
 
         {/* Content */}
         <div className="relative z-10 w-full h-full" style={{ transform: "translateZ(50px)" }}>

@@ -40,6 +40,8 @@ export const NeuralCore: React.FC = () => {
       z: number;
       vx: number;
       vy: number;
+      ix: number; // Interaction velocity x
+      iy: number; // Interaction velocity y
       baseSize: number;
       pulsePhase: number;
       pulseSpeed: number;
@@ -50,15 +52,46 @@ export const NeuralCore: React.FC = () => {
         this.z = initZ !== undefined ? initZ : Math.random() * 2000;
         this.vx = (Math.random() - 0.5) * 0.5;
         this.vy = (Math.random() - 0.5) * 0.5;
+        this.ix = 0;
+        this.iy = 0;
         this.baseSize = Math.random() * 2 + 1;
         this.pulsePhase = Math.random() * Math.PI * 2;
         this.pulseSpeed = 0.02 + Math.random() * 0.03;
       }
 
-      update(pointer: { x: number, y: number, active: boolean }, zSpeed: number) {
-        this.x += this.vx;
-        this.y += this.vy;
+      update(pointer: { x: number, y: number, active: boolean }, zSpeed: number, width: number, height: number, fov: number) {
+        // Friction on interaction velocity
+        this.ix *= 0.95;
+        this.iy *= 0.95;
+
+        this.x += this.vx + this.ix;
+        this.y += this.vy + this.iy;
         this.z -= zSpeed;
+
+        // Mouse interaction (Repulsion with momentum)
+        if (pointer.active) {
+            const scale = fov / (fov + this.z);
+            // Quick check for performance: skip if scale is too small
+            if (scale < 0.1) return;
+
+            const sx = width / 2 + (this.x * scale);
+            const sy = height / 2 + (this.y * scale);
+            
+            const dx = sx - pointer.x;
+            const dy = sy - pointer.y;
+            const distSq = dx * dx + dy * dy;
+            
+            const forceRadius = isMobile ? 180 : 250;
+            const forceRadiusSq = forceRadius * forceRadius;
+
+            if (distSq < forceRadiusSq) {
+                const dist = Math.sqrt(distSq);
+                const force = (forceRadius - dist) / forceRadius;
+                const strength = isMobile ? 0.6 : 1.5;
+                this.ix += (dx / dist) * force * strength * (1 / scale);
+                this.iy += (dy / dist) * force * strength * (1 / scale);
+            }
+        }
 
         // Reset if it passes behind the camera
         if (this.z < -fov + 10) {
@@ -136,19 +169,23 @@ export const NeuralCore: React.FC = () => {
 
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
-        p1.update(mouse, zSpeed);
+        p1.update(mouse, zSpeed, canvas!.width, canvas!.height, fov);
         p1.draw(ctx!);
 
-        // Connect nodes
+        // Connect nodes - Optimized loop
+        const rSq = connectionRadius * connectionRadius;
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           
+          // Fast check for Z distance first
+          const dz = p1.z - p2.z;
+          if (Math.abs(dz) > connectionRadius) continue;
+
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
-          const dz = p1.z - p2.z;
           const distSq = dx*dx + dy*dy + dz*dz;
 
-          if (distSq < connectionRadius * connectionRadius) {
+          if (distSq < rSq) {
             // Draw 3D projected line
             if (p1.z < -fov || p2.z < -fov) continue;
             

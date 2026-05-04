@@ -13,6 +13,14 @@
   --color-pure: #FFFFFF;
 }
 
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 html, body {
   position: relative;
 }
